@@ -5,11 +5,11 @@ namespace Connect4.src.Graphics
 {
     internal struct PixelData
     {
-        public Vector2 PixelPosition;
-        public PixelType PixelType;
-        public Color PixelColor;
+        internal Vector2 PixelPosition;
+        internal PixelType PixelType;
+        internal Color PixelColor;
 
-        public PixelData(Vector2 pixelPosition, PixelType pixelType, Color pixelColor)
+        internal PixelData(Vector2 pixelPosition, PixelType pixelType, Color pixelColor)
         {
             PixelPosition = pixelPosition;
             PixelType = pixelType;

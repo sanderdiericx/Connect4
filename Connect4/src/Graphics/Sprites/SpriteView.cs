@@ -4,13 +4,13 @@ namespace Connect4.src.Graphics.Sprites
 {
     internal struct SpriteView
     {
-        public float X;
-        public float Y;
-        public Color BorderColor;
-        public Color FillColor;
-        public int BorderSize;
+        internal float X;
+        internal float Y;
+        internal Color BorderColor;
+        internal Color FillColor;
+        internal int BorderSize;
 
-        public SpriteView(float x, float y, Color borderColor, Color fillColor, int borderSize)
+        internal SpriteView(float x, float y, Color borderColor, Color fillColor, int borderSize)
         {
             X = x;
             Y = y;

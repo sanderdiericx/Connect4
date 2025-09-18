@@ -11,7 +11,7 @@ namespace Connect4.src.Graphics
         private GraphicsEngine() { }
 
         private static GraphicsEngine _instance = null;
-        public static GraphicsEngine Start(int width, int height)
+        internal static GraphicsEngine Start(int width, int height)
         {
             if (_instance == null)
             {
@@ -30,23 +30,23 @@ namespace Connect4.src.Graphics
             return _instance;
         }
 
-        public static Bitmap Frame;
-        public static RenderBatch RenderBatch;
+        internal static Bitmap Frame;
+        internal static RenderBatch RenderBatch;
 
-        public static int WindowWidth;
-        public static int WindowHeight;
+        internal static int WindowWidth;
+        internal static int WindowHeight;
 
-        public static void DrawRenderBatch()
+        internal static void DrawRenderBatch()
         {
             RenderBatch.Draw();
         }
 
-        public static void ClearRenderBatch()
+        internal static void ClearRenderBatch()
         {
             RenderBatch.Clear();
         }
 
-        public static void ClearFrame()
+        internal static void ClearFrame()
         {
             for (int x = 0; x < Frame.Width; x++)
             {

@@ -5,15 +5,15 @@ namespace Connect4.src.Graphics.Sprites
 {
     internal class Circle : Sprite
     {
-        public readonly int IterationCount = 2000;
-        public float Radius;
+        internal readonly int IterationCount = 2000;
+        internal float Radius;
 
-        public Circle(SpriteView spriteView, float radius) : base(spriteView)
+        internal Circle(SpriteView spriteView, float radius) : base(spriteView)
         {
             Radius = radius;
         }
 
-        public override void Initialize()
+        internal override void Initialize()
         {
             base.Initialize();
 

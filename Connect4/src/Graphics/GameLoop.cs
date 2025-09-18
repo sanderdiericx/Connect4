@@ -9,7 +9,6 @@ namespace Connect4.src.Graphics
     {
         private static Grid grid;
 
-
         internal static void LoadGame()
         {
             GridLayout gridLayout = new GridLayout(7, 6, 90, 80, 10, Color.Black, Color.WhiteSmoke, 6, true, true);

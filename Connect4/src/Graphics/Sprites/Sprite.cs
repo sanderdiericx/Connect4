@@ -13,18 +13,18 @@ namespace Connect4.src.Graphics.Sprites
         
         private bool _isInitialized;
 
-        public float XPosition;
-        public float YPosition;
+        internal float XPosition;
+        internal float YPosition;
 
-        public bool IsFilled;
-        public bool HasBorder;
-        public bool IsVisible;
+        internal bool IsFilled;
+        internal bool HasBorder;
+        internal bool IsVisible;
 
-        public Color FillColor;
-        public Color BorderColor;
-        public int BorderSize;
+        internal Color FillColor;
+        internal Color BorderColor;
+        internal int BorderSize;
 
-        public Sprite(SpriteView spriteView)
+        internal Sprite(SpriteView spriteView)
         {
             XPosition = spriteView.X;
             YPosition = spriteView.Y;
@@ -41,7 +41,7 @@ namespace Connect4.src.Graphics.Sprites
         }
 
         // Initialize builds pixel data for sprites, initialize can also be called to reset sprite size, border color and fillcolor
-        public virtual void Initialize()
+        internal virtual void Initialize()
         {
             if (_isInitialized)
             {

@@ -7,9 +7,9 @@ namespace Connect4.src.Game
     {
         private GridLayout _gridLayout;
 
-        public Sprite[,] GameGrid;
+        internal Sprite[,] GameGrid;
 
-        public Grid(GridLayout gridLayout)
+        internal Grid(GridLayout gridLayout)
         {
             _gridLayout = gridLayout;
 

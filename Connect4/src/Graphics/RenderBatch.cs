@@ -8,23 +8,22 @@ namespace Connect4.src.Graphics
     {
         private readonly List<Sprite> sprites;
 
-        public void Clear()
+        internal void Clear()
         {
             sprites.Clear();
         }
 
-
-        public RenderBatch()
+        internal RenderBatch()
         {
             sprites = new List<Sprite>();
         }
 
-        public void AddSprite(Sprite sprite)
+        internal void AddSprite(Sprite sprite)
         {
             sprites.Add(sprite);
         }
 
-        public void AddGrid(Grid grid)
+        internal void AddGrid(Grid grid)
         {
             foreach (var rectangle in grid.GameGrid)
             {
@@ -32,7 +31,7 @@ namespace Connect4.src.Graphics
             }
         }
 
-        public void Draw()
+        internal void Draw()
         {
             foreach (var sprite in sprites)
             {

@@ -4,16 +4,16 @@ namespace Connect4.src.Graphics.Sprites
 {
     internal class Rectangle : Sprite
     {
-        public int Width;
-        public int Height;
+        internal int Width;
+        internal int Height;
 
-        public Rectangle(SpriteView spriteView, int width, int height) : base(spriteView)
+        internal Rectangle(SpriteView spriteView, int width, int height) : base(spriteView)
         {
             Width = width;
             Height = height;
         }
 
-        public override void Initialize()
+        internal override void Initialize()
         {
             base.Initialize();
 

@@ -9,18 +9,18 @@ namespace Connect4.src.Game
 {
     internal struct GridLayout
     {
-        public int Columns;
-        public int Rows;
-        public int Gap;
-        public int Padding;
-        public int Offset;
-        public Color BorderColor;
-        public Color FillColor;
-        public int BorderSize;
-        public bool IsFilled;
-        public bool HasBorder;
+        internal int Columns;
+        internal int Rows;
+        internal int Gap;
+        internal int Padding;
+        internal int Offset;
+        internal Color BorderColor;
+        internal Color FillColor;
+        internal int BorderSize;
+        internal bool IsFilled;
+        internal bool HasBorder;
 
-        public GridLayout(int columns, int rows, int gap, int padding, int offset, Color borderColor, Color fillColor, int borderSize, bool isFilled, bool hasBorder)
+        internal GridLayout(int columns, int rows, int gap, int padding, int offset, Color borderColor, Color fillColor, int borderSize, bool isFilled, bool hasBorder)
         {
             Columns = columns;
             Rows = rows;

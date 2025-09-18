@@ -7,7 +7,7 @@ namespace Connect4.src.Graphics
 {
     internal static class Rasturizer
     {
-        public static List<PixelData> ComputeCirclePixels(Circle circle)
+        internal static List<PixelData> ComputeCirclePixels(Circle circle)
         {
             List<PixelData> pixels = new List<PixelData>();
 
@@ -48,7 +48,7 @@ namespace Connect4.src.Graphics
             return pixels;
         }
 
-        public static List<PixelData> ComputeRectanglePixels(Rectangle rectangle)
+        internal static List<PixelData> ComputeRectanglePixels(Rectangle rectangle)
         {
             List<PixelData> pixels = new List<PixelData>();
 
@@ -98,7 +98,7 @@ namespace Connect4.src.Graphics
         }
 
         /*
-        public static List<Vector2> ComputeTriangleBorderPositions(float xPosition, float yPosition, int baseLength, int height)
+        internal static List<Vector2> ComputeTriangleBorderPositions(float xPosition, float yPosition, int baseLength, int height)
         {
             List<Vector2> borderPositions = new List<Vector2>();
 
