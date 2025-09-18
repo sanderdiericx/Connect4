@@ -69,7 +69,7 @@
     <Compile Include="src\Graphics\Sprites\Sprite.cs" />
     <Compile Include="src\Graphics\Sprites\SpriteView.cs" />
     <Compile Include="src\Graphics\Sprites\Triangle.cs" />
-    <Compile Include="src\Logs\Logger.cs" />
+    <Compile Include="src\Logging\Logger.cs" />
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
