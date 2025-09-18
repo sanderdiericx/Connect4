@@ -32,15 +32,9 @@ namespace Connect4.src.Graphics
 
         public static Bitmap Frame;
         public static RenderBatch RenderBatch;
-        public static Grid Grid;
 
         public static int WindowWidth;
         public static int WindowHeight;
-
-        public static void SetGrid(Grid grid)
-        {
-            Grid = grid;
-        }
 
         public static void DrawRenderBatch()
         {

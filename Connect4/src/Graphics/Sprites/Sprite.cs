@@ -40,6 +40,7 @@ namespace Connect4.src.Graphics.Sprites
             BorderSize = spriteView.BorderSize;
         }
 
+        // Initialize builds pixel data for sprites, initialize can also be called to reset sprite size, border color and fillcolor
         public virtual void Initialize()
         {
             if (_isInitialized)
@@ -53,7 +54,7 @@ namespace Connect4.src.Graphics.Sprites
         }
 
         // Draws sprite to the current bitmap, draw order is determined by the order of input to the renderBatch
-        public virtual void Draw()
+        internal void Draw()
         {
             if (!_isInitialized)
             {

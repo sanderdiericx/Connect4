@@ -7,32 +7,29 @@ namespace Connect4.src.Graphics
 {
     internal class GameLoop
     {
-        public static void LoadGame()
-        {
+        private static Grid grid;
 
+
+        internal static void LoadGame()
+        {
+            GridLayout gridLayout = new GridLayout(7, 6, 90, 80, 10, Color.Black, Color.WhiteSmoke, 6, true, true);
+            grid = new Grid(gridLayout);
         }
 
-        public static void UpdateGame()
+        internal static void UpdateGame()
         {
             
 
             
         }
 
-        public static void RenderGame()
+        internal static void RenderGame()
         {
             GraphicsEngine.ClearFrame();
             GraphicsEngine.ClearRenderBatch();
 
-            if (GraphicsEngine.Grid == null)
-            {
-                Logger.LogWarning("Grid must be given to the graphics engine");
-
-                return;
-            }
-
             // Run render code here!
-            GraphicsEngine.RenderBatch.AddGrid(GraphicsEngine.Grid);
+            GraphicsEngine.RenderBatch.AddGrid(grid);
 
             Circle circle = new Circle(new SpriteView(700, 600, Color.Black, Color.LightYellow, 6), 70);
             circle.Initialize();

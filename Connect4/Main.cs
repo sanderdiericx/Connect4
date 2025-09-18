@@ -27,9 +27,7 @@ namespace Connect4
             frameTimer.Tick += FrameTimer_Tick;
             frameTimer.Start();
 
-            GridLayout gridLayout = new GridLayout(7, 6, 90, 80, 10, Color.Black, Color.WhiteSmoke, 6, true, true);
-            Grid grid = new Grid(gridLayout);
-            GraphicsEngine.SetGrid(grid);
+            GameLoop.LoadGame();
         }
 
         private void FrameTimer_Tick(object sender, EventArgs e)
