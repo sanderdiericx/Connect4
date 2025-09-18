@@ -97,34 +97,41 @@ namespace Connect4.src.Graphics
             return pixels;
         }
 
-        /*
-        internal static List<Vector2> ComputeTriangleBorderPositions(float xPosition, float yPosition, int baseLength, int height)
-        {
-            List<Vector2> borderPositions = new List<Vector2>();
+        // TO DO, USE PROPER NAMING CONVENTIONS FOR ALL INTERNAL VARIABLES
 
-            Vector2 corner1 = new Vector2(xPosition, yPosition);
-            Vector2 corner2 = new Vector2(xPosition + baseLength, yPosition);
-            Vector2 corner3 = new Vector2((xPosition + baseLength) / 2, yPosition + height);
+        internal static List<PixelData> ComputeTrianglePixels(Triangle triangle)
+        {
+            List<PixelData> pixels = new List<PixelData>();
+
+            Vector2 corner1 = new Vector2(triangle.XPosition, triangle.YPosition);
+            Vector2 corner2 = new Vector2(triangle.XPosition + triangle.baseLength, triangle.YPosition);
+            Vector2 corner3 = new Vector2((triangle.XPosition + triangle.baseLength) / 2, triangle.YPosition + triangle.height);
+
+            ComputeLineVectors(triangle, pixels, corner1, corner2);
+            ComputeLineVectors(triangle, pixels, corner1, corner3);
+            ComputeLineVectors(triangle, pixels, corner3, corner2);
 
             
-            float dx = corner1.X - corner2.X;
-            float dy = corner1.Y - corner2.Y;
+
+            return pixels;
+        }
+
+
+
+        // Use DDA line algorithm to determine triangle lines, this algorithm assumes x2 > x1
+        private static void ComputeLineVectors(Triangle triangle, List<PixelData> pixels, Vector2 point1, Vector2 point2)
+        {
+            float dx = point2.X - point1.X;
+            float dy = point2.Y - point1.Y;
 
             float slope = dy / dx;
 
-            for (float x = corner1.X; x < corner2.X; x++)
+            for (float x = point1.X; x <= point2.X; x++)
             {
+                float y = slope * (x - point1.X) + point1.Y;
 
+                pixels.Add(new PixelData(new Vector2(x, y), PixelType.Border, triangle.BorderColor));
             }
-
         }
-
-        // Use DDA line algorithm to determine triangle lines, this algorithm assumes x2 > x1
-        private static List<Vector2> ComputeLineVectors(Vector2 point1, Vector2 point2)
-        {
-
-        }
-
-        */
     }
 }

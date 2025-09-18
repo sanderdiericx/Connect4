@@ -8,13 +8,13 @@ namespace Connect4.src.Graphics.Sprites
 {
     internal class Triangle : Sprite
     {
-        private int _baseLength;
-        private int _height;
+        internal int baseLength;
+        internal int height;
 
         internal Triangle(SpriteView spriteView, int baseLength, int height) : base(spriteView)
         {
-            _baseLength = baseLength;
-            _height = height;
+            this.baseLength = baseLength;
+            this.height = height;
         }
 
         internal override void Initialize()
