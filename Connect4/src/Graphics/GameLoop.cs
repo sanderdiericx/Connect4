@@ -32,6 +32,7 @@ namespace Connect4.src.Graphics
             }
 
             // Run render code here!
+            GraphicsEngine.RenderBatch.AddGrid(GraphicsEngine.Grid);
 
             Circle circle = new Circle(new SpriteView(700, 600, Color.Black, Color.LightYellow, 6), 70);
             circle.Initialize();
@@ -40,8 +41,6 @@ namespace Connect4.src.Graphics
             circle.HasBorder = true;
 
             GraphicsEngine.RenderBatch.AddSprite(circle);
-
-            GraphicsEngine.RenderBatch.AddGrid(GraphicsEngine.Grid);
 
             GraphicsEngine.DrawRenderBatch();
         }

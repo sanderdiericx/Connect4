@@ -3,41 +3,41 @@ using System.Drawing;
 using System.Numerics;
 using System;
 using Connect4.src.Logs;
+using System.Linq;
 
 namespace Connect4.src.Graphics.Sprites
 {
     internal abstract class Sprite
     {
-        protected float xPosition;
-        protected float yPosition;
-        protected List<Vector2> borderPositions;
-        protected List<Vector2> pixelPositions;
-        protected int borderSize;
-
-        private bool _isInitialized;
+        protected List<PixelData> pixels;
         
+        private bool _isInitialized;
+
+        public float XPosition;
+        public float YPosition;
+
         public bool IsFilled;
         public bool HasBorder;
         public bool IsVisible;
 
-        private Color _fillColor;
-        private Color _borderColor;
-
+        public Color FillColor;
+        public Color BorderColor;
+        public int BorderSize;
 
         public Sprite(SpriteView spriteView)
         {
-            xPosition = spriteView.X;
-            yPosition = spriteView.Y;
+            XPosition = spriteView.X;
+            YPosition = spriteView.Y;
 
             _isInitialized = false;
             IsFilled = true;
             HasBorder = true;
             IsVisible = true;
 
-            _borderColor = spriteView.BorderColor;
-            _fillColor = spriteView.FillColor;
+            BorderColor = spriteView.BorderColor;
+            FillColor = spriteView.FillColor;
 
-            borderSize = spriteView.BorderSize;
+            BorderSize = spriteView.BorderSize;
         }
 
         public virtual void Initialize()
@@ -66,22 +66,22 @@ namespace Connect4.src.Graphics.Sprites
             {
                 if (IsFilled)
                 {
-                    foreach (var position in pixelPositions)
+                    foreach (var pixelData in pixels.Where(p => p.PixelType == PixelType.Filling))
                     {
-                        if (position.X >= 0 && position.X < GraphicsEngine.WindowWidth && position.Y >= 0 && position.Y < GraphicsEngine.WindowHeight)
+                        if (pixelData.PixelPosition.X >= 0 && pixelData.PixelPosition.X < GraphicsEngine.WindowWidth && pixelData.PixelPosition.Y >= 0 && pixelData.PixelPosition.Y < GraphicsEngine.WindowHeight)
                         {
-                            GraphicsEngine.Frame.SetPixel((int)position.X, (int)position.Y, _fillColor);
+                            GraphicsEngine.Frame.SetPixel((int)pixelData.PixelPosition.X, (int)pixelData.PixelPosition.Y, pixelData.PixelColor);
                         }
                     }
                 }
 
                 if (HasBorder)
                 {
-                    foreach (var position in borderPositions)
+                    foreach (var pixelData in pixels.Where(p => p.PixelType == PixelType.Border))
                     {
-                        if (position.X >= 0 && position.X < GraphicsEngine.WindowWidth && position.Y >= 0 && position.Y < GraphicsEngine.WindowHeight)
+                        if (pixelData.PixelPosition.X >= 0 && pixelData.PixelPosition.X < GraphicsEngine.WindowWidth && pixelData.PixelPosition.Y >= 0 && pixelData.PixelPosition.Y < GraphicsEngine.WindowHeight)
                         {
-                            GraphicsEngine.Frame.SetPixel((int)position.X, (int)position.Y, _borderColor);
+                            GraphicsEngine.Frame.SetPixel((int)pixelData.PixelPosition.X, (int)pixelData.PixelPosition.Y, pixelData.PixelColor);
                         }
                     }
                 }

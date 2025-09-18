@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Connect4.src.Graphics.Sprites;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -6,106 +7,94 @@ namespace Connect4.src.Graphics
 {
     internal static class Rasturizer
     {
-        public static List<Vector2> ComputeCircleBorderPositions(float xPosition, float yPosition, float radius, int borderSize, int iterationCount)
+        public static List<PixelData> ComputeCirclePixels(Circle circle)
         {
-            // Create the border positions for a circle
-            List<Vector2> borderPositions = new List<Vector2>();
+            List<PixelData> pixels = new List<PixelData>();
 
-            float angleStep = 2 * (float)Math.PI / iterationCount;
-            float currentRadius = radius;
+            // Compute border pixels
+            float angleStep = 2 * (float)Math.PI / circle.IterationCount;
+            float currentRadius = circle.Radius;
 
-            for (int i = 0; i < borderSize; i++)
+            for (int i = 0; i < circle.BorderSize; i++)
             {
                 currentRadius--;
 
-                for (int j = 0; j < iterationCount; j++)
+                for (int j = 0; j < circle.IterationCount; j++)
                 {
                     float radians = j * angleStep;
 
-                    int x = (int) Math.Round(xPosition + currentRadius * Math.Cos(radians));
-                    int y = (int) Math.Round(yPosition + currentRadius * Math.Sin(radians));
+                    int x = (int)Math.Round(circle.XPosition + currentRadius * Math.Cos(radians));
+                    int y = (int)Math.Round(circle.YPosition + currentRadius * Math.Sin(radians));
 
-                    borderPositions.Add(new Vector2(x, y));
+                    pixels.Add(new PixelData(new Vector2(x, y), PixelType.Border, circle.BorderColor));
                 }
             }
-
-            return borderPositions;
-        }
-
-        public static List<Vector2> ComputeCirclePixelPositions(float xPosition, float yPosition, float radius)
-        {
-            List<Vector2> pixelPositions = new List<Vector2>();
 
             // Loop over the first half of the triangle and compute fill pixel coordinates
             // (x - h)^2 + (y - k)^2 = r^2 solve for y to find xstart and xend
-            for (int y = (int)(yPosition - radius); y <= yPosition + radius; y++)
+            for (int y = (int)(circle.YPosition - circle.Radius); y <= circle.YPosition + circle.Radius; y++)
             {
-                float equation = (float)Math.Sqrt((radius * radius) - Math.Pow(y - yPosition, 2));
+                float equation = (float)Math.Sqrt((circle.Radius * circle.Radius) - Math.Pow(y - circle.YPosition, 2));
 
-                int xstart = (int)Math.Round(xPosition - equation);
-                int xend = (int)Math.Round(xPosition + equation);
+                int xstart = (int)Math.Round(circle.XPosition - equation);
+                int xend = (int)Math.Round(circle.XPosition + equation);
 
                 for (int x = xstart; x <= xend; x++)
                 {
-                    pixelPositions.Add(new Vector2(x, y));
+                    pixels.Add(new PixelData(new Vector2(x, y), PixelType.Filling, circle.FillColor));
                 }
             }
 
-            return pixelPositions;
+            return pixels;
         }
 
-        public static List<Vector2> ComputeRectangleBorderPositions(float xPosition, float yPosition, int width, int height, int bordersize)
+        public static List<PixelData> ComputeRectanglePixels(Rectangle rectangle)
         {
-            List<Vector2> borderPositions = new List<Vector2>();
+            List<PixelData> pixels = new List<PixelData>();
 
-            for (int x = 0; x <= width; x++)
+            // Compute border pixels
+            for (int x = 0; x <= rectangle.Width; x++)
             {
-                for (int i = 0; i < bordersize; i++)
+                for (int i = 0; i < rectangle.BorderSize; i++)
                 {
-                    borderPositions.Add(new Vector2(xPosition + x, yPosition + i));
+                    pixels.Add(new PixelData(new Vector2(rectangle.XPosition + x, rectangle.YPosition + i), PixelType.Border, rectangle.BorderColor));
                 }
             }
 
-            for (int x = 0; x <= width; x++)
+            for (int x = 0; x <= rectangle.Width; x++)
             {
-                for (int i = 0; i < bordersize; i++)
+                for (int i = 0; i < rectangle.BorderSize; i++)
                 {
-                    borderPositions.Add(new Vector2(xPosition + x, yPosition + height - i));
+                    pixels.Add(new PixelData(new Vector2(rectangle.XPosition + x, rectangle.YPosition + rectangle.Height - i), PixelType.Border, rectangle.BorderColor));
                 }
             }
 
-            for (int y = 1; y <= height - 1; y++)
+            for (int y = 1; y <= rectangle.Height - 1; y++)
             {
-                for (int i = 0; i < bordersize; i++)
+                for (int i = 0; i < rectangle.BorderSize; i++)
                 {
-                    borderPositions.Add(new Vector2(xPosition + i, yPosition + y));
-                }   
-            }
-
-            for (int y = 1; y <= height - 1; y++)
-            {
-                for (int i = 0; i < bordersize; i++)
-                {
-                    borderPositions.Add(new Vector2(xPosition + width - i, yPosition + y));
+                    pixels.Add(new PixelData(new Vector2(rectangle.XPosition + i, rectangle.YPosition + y), PixelType.Border, rectangle.BorderColor));
                 }
             }
 
-            return borderPositions;
-        }
-
-        public static List<Vector2> ComputeRectanglePixelPositions(float xPosition, float yPosition, int width, int height)
-        {
-            List<Vector2> pixelPositions = new List<Vector2>();
-
-            for (int y = (int)yPosition; y <= yPosition + height; y++)
+            for (int y = 1; y <= rectangle.Height - 1; y++)
             {
-                for (int x = (int)xPosition; x <= xPosition + width; x++)
+                for (int i = 0; i < rectangle.BorderSize; i++)
                 {
-                    pixelPositions.Add(new Vector2(x, y));
+                    pixels.Add(new PixelData(new Vector2(rectangle.XPosition + rectangle.Width - i, rectangle.YPosition + y), PixelType.Border, rectangle.BorderColor));
                 }
             }
 
-            return pixelPositions;
+            // Compute fill pixels
+            for (int y = (int)rectangle.YPosition; y <= rectangle.YPosition + rectangle.Height; y++)
+            {
+                for (int x = (int)rectangle.XPosition; x <= rectangle.XPosition + rectangle.Width; x++)
+                {
+                    pixels.Add(new PixelData(new Vector2(x, y), PixelType.Filling, rectangle.FillColor));
+                }
+            }
+
+            return pixels;
         }
 
         /*

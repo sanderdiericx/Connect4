@@ -62,6 +62,8 @@
     <Compile Include="src\Game\GridLayout.cs" />
     <Compile Include="src\Graphics\GameLoop.cs" />
     <Compile Include="src\Graphics\GraphicsEngine.cs" />
+    <Compile Include="src\Graphics\PixelData.cs" />
+    <Compile Include="src\Graphics\PixelType.cs" />
     <Compile Include="src\Graphics\Rasturizer.cs" />
     <Compile Include="src\Graphics\RenderBatch.cs" />
     <Compile Include="src\Graphics\Sprites\Circle.cs" />
