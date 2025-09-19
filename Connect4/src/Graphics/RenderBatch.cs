@@ -6,34 +6,34 @@ namespace Connect4.src.Graphics
 {
     internal class RenderBatch
     {
-        private readonly List<Sprite> sprites;
+        private readonly List<Sprite> _sprites;
 
         internal void Clear()
         {
-            sprites.Clear();
+            _sprites.Clear();
         }
 
         internal RenderBatch()
         {
-            sprites = new List<Sprite>();
+            _sprites = new List<Sprite>();
         }
 
         internal void AddSprite(Sprite sprite)
         {
-            sprites.Add(sprite);
+            _sprites.Add(sprite);
         }
 
         internal void AddGrid(Grid grid)
         {
-            foreach (var rectangle in grid.GameGrid)
+            foreach (var rectangle in grid._gameGrid)
             {
-                sprites.Add(rectangle);
+                _sprites.Add(rectangle);
             }
         }
 
         internal void Draw()
         {
-            foreach (var sprite in sprites)
+            foreach (var sprite in _sprites)
             {
                 sprite.Draw();
             }

@@ -40,7 +40,7 @@ namespace Connect4
 
         private void Main_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.DrawImage(GraphicsEngine.Frame, 0, 0);
+            e.Graphics.DrawImage(GraphicsEngine._frame, 0, 0);
         }
     }
 }

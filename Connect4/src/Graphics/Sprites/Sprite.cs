@@ -13,31 +13,31 @@ namespace Connect4.src.Graphics.Sprites
         
         private bool _isInitialized;
 
-        internal float XPosition;
-        internal float YPosition;
+        internal float _xPosition;
+        internal float _yPosition;
 
-        internal bool IsFilled;
-        internal bool HasBorder;
-        internal bool IsVisible;
+        internal bool _isFilled;
+        internal bool _hasBorder;
+        internal bool _isVisible;
 
-        internal Color FillColor;
-        internal Color BorderColor;
-        internal int BorderSize;
+        internal Color _fillColor;
+        internal Color _borderColor;
+        internal int _borderSize;
 
         internal Sprite(SpriteView spriteView)
         {
-            XPosition = spriteView.X;
-            YPosition = spriteView.Y;
+            _xPosition = spriteView._x;
+            _yPosition = spriteView._y;
 
             _isInitialized = false;
-            IsFilled = true;
-            HasBorder = true;
-            IsVisible = true;
+            _isFilled = true;
+            _hasBorder = true;
+            _isVisible = true;
 
-            BorderColor = spriteView.BorderColor;
-            FillColor = spriteView.FillColor;
+            _borderColor = spriteView._borderColor;
+            _fillColor = spriteView._fillColor;
 
-            BorderSize = spriteView.BorderSize;
+            _borderSize = spriteView._borderSize;
         }
 
         // Initialize builds pixel data for sprites, initialize can also be called to reset sprite size, border color and fillcolor
@@ -63,26 +63,26 @@ namespace Connect4.src.Graphics.Sprites
                 return;
             }
 
-            if (IsVisible)
+            if (_isVisible)
             {
-                if (IsFilled)
+                if (_isFilled)
                 {
-                    foreach (var pixelData in pixels.Where(p => p.PixelType == PixelType.Filling))
+                    foreach (var pixelData in pixels.Where(p => p._pixelType == PixelType.Filling))
                     {
-                        if (pixelData.PixelPosition.X >= 0 && pixelData.PixelPosition.X < GraphicsEngine.WindowWidth && pixelData.PixelPosition.Y >= 0 && pixelData.PixelPosition.Y < GraphicsEngine.WindowHeight)
+                        if (pixelData._pixelPosition.X >= 0 && pixelData._pixelPosition.X < GraphicsEngine._windowWidth && pixelData._pixelPosition.Y >= 0 && pixelData._pixelPosition.Y < GraphicsEngine._windowHeight)
                         {
-                            GraphicsEngine.Frame.SetPixel((int)pixelData.PixelPosition.X, (int)pixelData.PixelPosition.Y, pixelData.PixelColor);
+                            GraphicsEngine._frame.SetPixel((int)pixelData._pixelPosition.X, (int)pixelData._pixelPosition.Y, pixelData._pixelColor);
                         }
                     }
                 }
 
-                if (HasBorder)
+                if (_hasBorder)
                 {
-                    foreach (var pixelData in pixels.Where(p => p.PixelType == PixelType.Border))
+                    foreach (var pixelData in pixels.Where(p => p._pixelType == PixelType.Border))
                     {
-                        if (pixelData.PixelPosition.X >= 0 && pixelData.PixelPosition.X < GraphicsEngine.WindowWidth && pixelData.PixelPosition.Y >= 0 && pixelData.PixelPosition.Y < GraphicsEngine.WindowHeight)
+                        if (pixelData._pixelPosition.X >= 0 && pixelData._pixelPosition.X < GraphicsEngine._windowWidth && pixelData._pixelPosition.Y >= 0 && pixelData._pixelPosition.Y < GraphicsEngine._windowHeight)
                         {
-                            GraphicsEngine.Frame.SetPixel((int)pixelData.PixelPosition.X, (int)pixelData.PixelPosition.Y, pixelData.PixelColor);
+                            GraphicsEngine._frame.SetPixel((int)pixelData._pixelPosition.X, (int)pixelData._pixelPosition.Y, pixelData._pixelColor);
                         }
                     }
                 }

@@ -1,6 +1,7 @@
 ﻿using Connect4.src.Graphics.Sprites;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace Connect4.src.Graphics
@@ -12,36 +13,36 @@ namespace Connect4.src.Graphics
             List<PixelData> pixels = new List<PixelData>();
 
             // Compute border pixels
-            float angleStep = 2 * (float)Math.PI / circle.IterationCount;
-            float currentRadius = circle.Radius;
+            float angleStep = 2 * (float)Math.PI / circle._iterationCount;
+            float currentRadius = circle._radius;
 
-            for (int i = 0; i < circle.BorderSize; i++)
+            for (int i = 0; i < circle._borderSize; i++)
             {
                 currentRadius--;
 
-                for (int j = 0; j < circle.IterationCount; j++)
+                for (int j = 0; j < circle._iterationCount; j++)
                 {
                     float radians = j * angleStep;
 
-                    int x = (int)Math.Round(circle.XPosition + currentRadius * Math.Cos(radians));
-                    int y = (int)Math.Round(circle.YPosition + currentRadius * Math.Sin(radians));
+                    int x = (int)Math.Round(circle._xPosition + currentRadius * Math.Cos(radians));
+                    int y = (int)Math.Round(circle._yPosition + currentRadius * Math.Sin(radians));
 
-                    pixels.Add(new PixelData(new Vector2(x, y), PixelType.Border, circle.BorderColor));
+                    pixels.Add(new PixelData(new Vector2(x, y), PixelType.Border, circle._borderColor));
                 }
             }
 
             // Loop over the first half of the triangle and compute fill pixel coordinates
             // (x - h)^2 + (y - k)^2 = r^2 solve for y to find xstart and xend
-            for (int y = (int)(circle.YPosition - circle.Radius); y <= circle.YPosition + circle.Radius; y++)
+            for (int y = (int)(circle._yPosition - circle._radius); y <= circle._yPosition + circle._radius; y++)
             {
-                float equation = (float)Math.Sqrt((circle.Radius * circle.Radius) - Math.Pow(y - circle.YPosition, 2));
+                float equation = (float)Math.Sqrt((circle._radius * circle._radius) - Math.Pow(y - circle._yPosition, 2));
 
-                int xstart = (int)Math.Round(circle.XPosition - equation);
-                int xend = (int)Math.Round(circle.XPosition + equation);
+                int xstart = (int)Math.Round(circle._xPosition - equation);
+                int xend = (int)Math.Round(circle._xPosition + equation);
 
                 for (int x = xstart; x <= xend; x++)
                 {
-                    pixels.Add(new PixelData(new Vector2(x, y), PixelType.Filling, circle.FillColor));
+                    pixels.Add(new PixelData(new Vector2(x, y), PixelType.Filling, circle._fillColor));
                 }
             }
 
@@ -53,44 +54,44 @@ namespace Connect4.src.Graphics
             List<PixelData> pixels = new List<PixelData>();
 
             // Compute border pixels
-            for (int x = 0; x <= rectangle.Width; x++)
+            for (int x = 0; x <= rectangle._width; x++)
             {
-                for (int i = 0; i < rectangle.BorderSize; i++)
+                for (int i = 0; i < rectangle._borderSize; i++)
                 {
-                    pixels.Add(new PixelData(new Vector2(rectangle.XPosition + x, rectangle.YPosition + i), PixelType.Border, rectangle.BorderColor));
+                    pixels.Add(new PixelData(new Vector2(rectangle._xPosition + x, rectangle._yPosition + i), PixelType.Border, rectangle._borderColor));
                 }
             }
 
-            for (int x = 0; x <= rectangle.Width; x++)
+            for (int x = 0; x <= rectangle._width; x++)
             {
-                for (int i = 0; i < rectangle.BorderSize; i++)
+                for (int i = 0; i < rectangle._borderSize; i++)
                 {
-                    pixels.Add(new PixelData(new Vector2(rectangle.XPosition + x, rectangle.YPosition + rectangle.Height - i), PixelType.Border, rectangle.BorderColor));
+                    pixels.Add(new PixelData(new Vector2(rectangle._xPosition + x, rectangle._yPosition + rectangle._height - i), PixelType.Border, rectangle._borderColor));
                 }
             }
 
-            for (int y = 1; y <= rectangle.Height - 1; y++)
+            for (int y = 1; y <= rectangle._height - 1; y++)
             {
-                for (int i = 0; i < rectangle.BorderSize; i++)
+                for (int i = 0; i < rectangle._borderSize; i++)
                 {
-                    pixels.Add(new PixelData(new Vector2(rectangle.XPosition + i, rectangle.YPosition + y), PixelType.Border, rectangle.BorderColor));
+                    pixels.Add(new PixelData(new Vector2(rectangle._xPosition + i, rectangle._yPosition + y), PixelType.Border, rectangle._borderColor));
                 }
             }
 
-            for (int y = 1; y <= rectangle.Height - 1; y++)
+            for (int y = 1; y <= rectangle._height - 1; y++)
             {
-                for (int i = 0; i < rectangle.BorderSize; i++)
+                for (int i = 0; i < rectangle._borderSize; i++)
                 {
-                    pixels.Add(new PixelData(new Vector2(rectangle.XPosition + rectangle.Width - i, rectangle.YPosition + y), PixelType.Border, rectangle.BorderColor));
+                    pixels.Add(new PixelData(new Vector2(rectangle._xPosition + rectangle._width - i, rectangle._yPosition + y), PixelType.Border, rectangle._borderColor));
                 }
             }
 
             // Compute fill pixels
-            for (int y = (int)rectangle.YPosition; y <= rectangle.YPosition + rectangle.Height; y++)
+            for (int y = (int)rectangle._yPosition; y <= rectangle._yPosition + rectangle._height; y++)
             {
-                for (int x = (int)rectangle.XPosition; x <= rectangle.XPosition + rectangle.Width; x++)
+                for (int x = (int)rectangle._xPosition; x <= rectangle._xPosition + rectangle._width; x++)
                 {
-                    pixels.Add(new PixelData(new Vector2(x, y), PixelType.Filling, rectangle.FillColor));
+                    pixels.Add(new PixelData(new Vector2(x, y), PixelType.Filling, rectangle._fillColor));
                 }
             }
 
@@ -103,15 +104,14 @@ namespace Connect4.src.Graphics
         {
             List<PixelData> pixels = new List<PixelData>();
 
-            Vector2 corner1 = new Vector2(triangle.XPosition, triangle.YPosition);
-            Vector2 corner2 = new Vector2(triangle.XPosition + triangle.baseLength, triangle.YPosition);
-            Vector2 corner3 = new Vector2((triangle.XPosition + triangle.baseLength) / 2, triangle.YPosition + triangle.height);
+            // Compute border pixels
+            Vector2 corner1 = new Vector2(triangle._xPosition, triangle._yPosition);
+            Vector2 corner2 = new Vector2(triangle._xPosition + triangle._baseLength, triangle._yPosition);
+            Vector2 corner3 = new Vector2((triangle._xPosition + triangle._baseLength) / 2, triangle._yPosition + triangle._height);
 
             ComputeLineVectors(triangle, pixels, corner1, corner2);
             ComputeLineVectors(triangle, pixels, corner1, corner3);
             ComputeLineVectors(triangle, pixels, corner3, corner2);
-
-            
 
             return pixels;
         }
@@ -130,7 +130,7 @@ namespace Connect4.src.Graphics
             {
                 float y = slope * (x - point1.X) + point1.Y;
 
-                pixels.Add(new PixelData(new Vector2(x, y), PixelType.Border, triangle.BorderColor));
+                pixels.Add(new PixelData(new Vector2(x, y), PixelType.Border, triangle._borderColor));
             }
         }
     }

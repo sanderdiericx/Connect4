@@ -7,7 +7,7 @@ namespace Connect4.src.Game
     {
         private GridLayout _gridLayout;
 
-        internal Sprite[,] GameGrid;
+        internal Sprite[,] _gameGrid;
 
         internal Grid(GridLayout gridLayout)
         {
@@ -18,26 +18,26 @@ namespace Connect4.src.Game
 
         private void GenerateGameGridRectangles()
         {
-            GameGrid = new Rectangle[_gridLayout.Columns, _gridLayout.Rows];
+            _gameGrid = new Rectangle[_gridLayout._columns, _gridLayout._rows];
 
-            int rectangleWidth = (GraphicsEngine.WindowWidth - (_gridLayout.Padding * 2) - (_gridLayout.Offset * _gridLayout.Columns)) / _gridLayout.Columns;
-            int rectangleHeight = (GraphicsEngine.WindowHeight - _gridLayout.Gap - (_gridLayout.Padding * 2) - (_gridLayout.Offset * _gridLayout.Rows)) / _gridLayout.Rows;
+            int rectangleWidth = (GraphicsEngine._windowWidth - (_gridLayout._padding * 2) - (_gridLayout._offset * _gridLayout._columns)) / _gridLayout._columns;
+            int rectangleHeight = (GraphicsEngine._windowHeight - _gridLayout._gap - (_gridLayout._padding * 2) - (_gridLayout._offset * _gridLayout._rows)) / _gridLayout._rows;
 
             // Loop through and create rectangles based off the gridLayout
-            for (int col = 0; col < _gridLayout.Columns; col++)
+            for (int col = 0; col < _gridLayout._columns; col++)
             {
-                int x = _gridLayout.Padding + col * (rectangleWidth + _gridLayout.Offset);
+                int x = _gridLayout._padding + col * (rectangleWidth + _gridLayout._offset);
 
-                for (int row = 0; row < _gridLayout.Rows; row++)
+                for (int row = 0; row < _gridLayout._rows; row++)
                 {
-                    int y = _gridLayout.Padding + _gridLayout.Gap + row * (rectangleHeight + _gridLayout.Offset);
+                    int y = _gridLayout._padding + _gridLayout._gap + row * (rectangleHeight + _gridLayout._offset);
 
-                    Rectangle rectangle = new Rectangle(new SpriteView(x, y, _gridLayout.BorderColor, _gridLayout.FillColor, _gridLayout.BorderSize), rectangleWidth, rectangleHeight);
+                    Rectangle rectangle = new Rectangle(new SpriteView(x, y, _gridLayout._borderColor, _gridLayout._fillColor, _gridLayout._borderSize), rectangleWidth, rectangleHeight);
                     rectangle.Initialize();
-                    rectangle.HasBorder = _gridLayout.HasBorder;
-                    rectangle.IsFilled = _gridLayout.IsFilled;
+                    rectangle._hasBorder = _gridLayout._hasBorder;
+                    rectangle._isFilled = _gridLayout._isFilled;
 
-                    GameGrid[col, row] = rectangle;
+                    _gameGrid[col, row] = rectangle;
                 }
             }
         }
