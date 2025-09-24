@@ -1,7 +1,6 @@
 ﻿using Connect4.src.Graphics.Sprites;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 
 namespace Connect4.src.Graphics
@@ -31,7 +30,7 @@ namespace Connect4.src.Graphics
                 }
             }
 
-            // Loop over the first half of the triangle and compute fill pixel coordinates
+            // Loop over each y position in the triangle and compute fill pixel coordinates
             // (x - h)^2 + (y - k)^2 = r^2 solve for y to find xstart and xend
             for (int y = (int)(circle._yPosition - circle._radius); y <= circle._yPosition + circle._radius; y++)
             {
@@ -40,7 +39,8 @@ namespace Connect4.src.Graphics
                 int xstart = (int)Math.Round(circle._xPosition - equation);
                 int xend = (int)Math.Round(circle._xPosition + equation);
 
-                for (int x = xstart; x <= xend; x++)
+                // Here we use circle._borderSize / 2 to avoid overdrawing the border pixels
+                for (int x = xstart + circle._borderSize / 2; x <= xend - circle._borderSize / 2; x++)
                 {
                     pixels.Add(new PixelData(new Vector2(x, y), PixelType.Filling, circle._fillColor));
                 }
@@ -98,8 +98,7 @@ namespace Connect4.src.Graphics
             return pixels;
         }
 
-        // TO DO, USE PROPER NAMING CONVENTIONS FOR ALL INTERNAL VARIABLES
-
+        // NOTE: this is by far not the best way to rasterize a triangle, but it works for our simple use case
         internal static List<PixelData> ComputeTrianglePixels(Triangle triangle)
         {
             List<PixelData> pixels = new List<PixelData>();
@@ -132,10 +131,39 @@ namespace Connect4.src.Graphics
                 currentCorner3.Y--;
             }
 
+            // Loop over each y position in the triangle and compute fill pixel coordinates
+            int minY = (int)corner1.Y;
+            int maxY = (int)corner3.Y;
+
+            for (int y = minY; y <= maxY; y++)
+            {
+                // Compute how far along the y axis we are
+                float t = (y - corner1.Y) / (corner3.Y - corner1.Y);
+
+                // Interpolate to find the left and right x coordinates at this assumed y position
+                float leftX = Lerp(corner1.X, corner3.X, t);
+                float rightX = Lerp(corner2.X, corner3.X, t);
+
+                if (y == minY)
+                {
+                    leftX = corner1.X;
+                    rightX = corner2.X;
+                }
+
+                for (int x = (int) leftX; x <= (int)rightX; x++)
+                {
+                    pixels.Add(new PixelData(new Vector2(x, y), PixelType.Filling, triangle._fillColor));
+                }
+            }
+
+
             return pixels;
         }
 
-
+        private static float Lerp(float a, float b, float t)
+        {
+            return a + t * (b - a);
+        }
 
         // Use DDA line algorithm to determine triangle lines, this algorithm assumes x2 > x1
         private static void ComputeLineVectors(Triangle triangle, List<PixelData> pixels, Vector2 point1, Vector2 point2)
