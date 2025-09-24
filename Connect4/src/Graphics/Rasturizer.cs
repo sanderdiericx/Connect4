@@ -107,11 +107,30 @@ namespace Connect4.src.Graphics
             // Compute border pixels
             Vector2 corner1 = new Vector2(triangle._xPosition, triangle._yPosition);
             Vector2 corner2 = new Vector2(triangle._xPosition + triangle._baseLength, triangle._yPosition);
-            Vector2 corner3 = new Vector2((triangle._xPosition + triangle._baseLength) / 2, triangle._yPosition + triangle._height);
+            Vector2 corner3 = new Vector2(triangle._xPosition + (triangle._baseLength / 2), triangle._yPosition + triangle._height);
 
-            ComputeLineVectors(triangle, pixels, corner1, corner2);
-            ComputeLineVectors(triangle, pixels, corner1, corner3);
-            ComputeLineVectors(triangle, pixels, corner3, corner2);
+            Vector2 currentCorner1 = corner1;
+            Vector2 currentCorner2 = corner2;
+            Vector2 currentCorner3 = corner3;
+
+            for (int i = 0; i < triangle._borderSize; i++)
+            {
+                if (i < triangle._borderSize / 2)
+                {
+                    ComputeLineVectors(triangle, pixels, currentCorner1, currentCorner2);
+                }
+
+                ComputeLineVectors(triangle, pixels, currentCorner1, currentCorner3);
+                ComputeLineVectors(triangle, pixels, currentCorner3, currentCorner2);
+
+                currentCorner1.X++;
+                currentCorner1.Y++;
+
+                currentCorner2.X--;
+                currentCorner2.Y++;
+
+                currentCorner3.Y--;
+            }
 
             return pixels;
         }
