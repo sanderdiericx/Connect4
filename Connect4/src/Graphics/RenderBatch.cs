@@ -33,11 +33,16 @@ namespace Connect4.src.Graphics
 
         internal void Draw()
         {
+            // Lock bitmap bits
+            System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, GraphicsEngine._frame.Width, GraphicsEngine._frame.Height);
+            var bmpData = GraphicsEngine._frame.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite, GraphicsEngine._frame.PixelFormat);
+
             foreach (var sprite in _sprites)
             {
-                sprite.RecalculatePixels();
-                sprite.Draw();
+                sprite.Draw(bmpData);
             }
+
+            GraphicsEngine._frame.UnlockBits(bmpData);
         }
     }
 }

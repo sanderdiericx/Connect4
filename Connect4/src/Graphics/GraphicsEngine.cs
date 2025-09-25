@@ -38,7 +38,7 @@ namespace Connect4.src.Graphics
         internal static int _windowWidth;
         internal static int _windowHeight;
 
-        internal static int _bytesPerPixel;
+        private static int _bytesPerPixel;
 
         internal static void DrawRenderBatch()
         {
@@ -55,21 +55,30 @@ namespace Connect4.src.Graphics
             Rectangle rect = new Rectangle(0, 0, _frame.Width, _frame.Height);
             var bmpData = _frame.LockBits(rect, ImageLockMode.ReadWrite, _frame.PixelFormat);
 
-            for (int x = 0; x < _frame.Width; x++)
-            {
-                for (int y = 0; y < _frame.Height; y++)
-                {
-                    // Find the position in memory of this pixel
-                    int index = y * bmpData.Stride + x * _bytesPerPixel;
+            int bytes = bmpData.Stride * _frame.Height; // Calculate the amount of bytes in the frame
+            byte[] buffer = new byte[bytes]; // This creates a byte array of all 0s (fully white)
 
-                    byte[] pixel = { 0, 0, 0, 0 };
-
-                    IntPtr startIndex = bmpData.Scan0; // Get a pointer to the start position of this pixel in memory
-                    System.Runtime.InteropServices.Marshal.Copy(pixel, 0, startIndex + index, 4); // Copy the pixel color data into the right position in memory
-                }
-            }
+            // Copy the buffer directly to memory at the location of our frame bitmap
+            IntPtr startPointer = bmpData.Scan0; // Grab a pointer to the start adress in memory
+            System.Runtime.InteropServices.Marshal.Copy(buffer, 0, startPointer, bytes);
 
             _frame.UnlockBits(bmpData);
+        }
+
+        // Writes pixel data to the a (bit locked!!!) bitmap memory address
+        internal static void SetPixelInBitmap(BitmapData bmpData, PixelData pixelData)
+        {
+            unsafe
+            {
+                byte* ptr = (byte*)bmpData.Scan0; // Grab start adress pointer
+                int index = (int)pixelData._pixelPosition.Y * bmpData.Stride + (int)pixelData._pixelPosition.X * _bytesPerPixel; // Compute pixel location in memory
+
+                // Write pixel color data directly to computed adress
+                ptr[index] = pixelData._pixelColor.B;
+                ptr[index + 1] = pixelData._pixelColor.G;
+                ptr[index + 2] = pixelData._pixelColor.R;
+                ptr[index + 3] = pixelData._pixelColor.A;
+            }
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace Connect4.src.Graphics
 {
-    internal struct PixelData
+    internal class PixelData
     {
         internal Vector2 _pixelPosition;
         internal PixelType _pixelType;
