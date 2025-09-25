@@ -80,22 +80,33 @@ namespace Connect4.src.Graphics.Sprites
             {
                 if (_isFilled)
                 {
-                    foreach (var pixelData in pixels.Where(p => p._pixelType == PixelType.Filling))
+                    for (int i = 0; i < pixels.Count; i++)
                     {
-                        if (pixelData._pixelPosition.X >= 0 && pixelData._pixelPosition.X < GraphicsEngine._windowWidth && pixelData._pixelPosition.Y >= 0 && pixelData._pixelPosition.Y < GraphicsEngine._windowHeight)
+                        PixelData pixel = pixels[i];
+
+                        if (pixel._pixelPosition.X >= 0 && pixel._pixelPosition.X < GraphicsEngine._windowWidth && pixel._pixelPosition.Y >= 0 && pixel._pixelPosition.Y < GraphicsEngine._windowHeight)
                         {
-                            GraphicsEngine.SetPixelInBitmap(bmpData, pixelData);
+                            if (pixel._pixelType != PixelType.Border)
+                            {
+                                GraphicsEngine.SetPixelInBitmap(bmpData, pixel);
+                            }
                         }
                     }
                 }
 
+
                 if (_hasBorder)
                 {
-                    foreach (var pixelData in pixels.Where(p => p._pixelType == PixelType.Border))
+                    for (int i = 0; i < pixels.Count; i++)
                     {
-                        if (pixelData._pixelPosition.X >= 0 && pixelData._pixelPosition.X < GraphicsEngine._windowWidth && pixelData._pixelPosition.Y >= 0 && pixelData._pixelPosition.Y < GraphicsEngine._windowHeight)
+                        PixelData pixel = pixels[i];
+
+                        if (pixel._pixelPosition.X >= 0 && pixel._pixelPosition.X < GraphicsEngine._windowWidth && pixel._pixelPosition.Y >= 0 && pixel._pixelPosition.Y < GraphicsEngine._windowHeight)
                         {
-                            GraphicsEngine.SetPixelInBitmap(bmpData, pixelData);
+                            if (pixel._pixelType != PixelType.Filling)
+                            {
+                                GraphicsEngine.SetPixelInBitmap(bmpData, pixel);
+                            }
                         }
                     }
                 }

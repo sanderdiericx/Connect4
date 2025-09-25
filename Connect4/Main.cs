@@ -10,7 +10,6 @@ namespace Connect4
 {
     public partial class Main : Form
     {
-
         private Stopwatch _stopwatch;
 
         public Main()

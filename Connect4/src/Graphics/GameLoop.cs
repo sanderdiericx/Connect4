@@ -14,6 +14,9 @@ namespace Connect4.src.Graphics
         private static Circle _circle;
         private static Stopwatch _stopWatch;
 
+        /// <summary>
+        /// Run loading code here!
+        /// </summary>
         internal static void LoadGame()
         {
             GridLayout gridLayout = new GridLayout(7, 6, 90, 80, 10, Color.Black, Color.WhiteSmoke, 6, true, true);
@@ -28,11 +31,18 @@ namespace Connect4.src.Graphics
             _stopWatch = new Stopwatch();
         }
 
+
+        /// <summary>
+        /// Run game update code here!
+        /// </summary>
         internal static void UpdateGame()
         {
-            _triangle.Transform(new Vector2(5, -1));
+            _triangle.Transform(new Vector2(20, -1));
         }
 
+        /// <summary>
+        /// Run render code here!
+        /// </summary>
         internal static void RenderGame()
         {
             _stopWatch.Restart();
@@ -49,10 +59,6 @@ namespace Connect4.src.Graphics
             Logger.LogInfo($"RenderBatch cleared in {_stopWatch.ElapsedMilliseconds}ms");
             _stopWatch.Restart();
 
-
-            // Run render code here!
-
-
             GraphicsEngine._renderBatch.AddGrid(_grid);
             GraphicsEngine._renderBatch.AddSprite(_circle);
             GraphicsEngine._renderBatch.AddSprite(_triangle);
@@ -60,7 +66,6 @@ namespace Connect4.src.Graphics
             _stopWatch.Stop();
             Logger.LogInfo($"Added sprites to renderbatch in {_stopWatch.ElapsedMilliseconds}ms");
             _stopWatch.Restart();
-
 
             GraphicsEngine.DrawRenderBatch();
 
