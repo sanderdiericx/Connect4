@@ -1,6 +1,8 @@
 ﻿using Connect4.src.Game;
 using Connect4.src.Graphics;
+using Connect4.src.Logs;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -8,6 +10,9 @@ namespace Connect4
 {
     public partial class Main : Form
     {
+
+        private Stopwatch _stopwatch;
+
         public Main()
         {
             InitializeComponent();
@@ -15,6 +20,8 @@ namespace Connect4
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            _stopwatch = new Stopwatch();
+
             Paint += Main_Paint;
             DoubleBuffered = true;
 
@@ -32,8 +39,18 @@ namespace Connect4
 
         private void FrameTimer_Tick(object sender, EventArgs e)
         {
+            _stopwatch.Restart();
+
             GameLoop.UpdateGame();
+
+            _stopwatch.Stop();
+            Logger.LogInfo($"Game updated in {_stopwatch.ElapsedMilliseconds}ms");
+            _stopwatch.Restart();
+
             GameLoop.RenderGame();
+
+            _stopwatch.Stop();
+            Logger.LogInfo($"Game rendered in {_stopwatch.ElapsedMilliseconds}ms");
 
             Invalidate(); // Force the form to repaint
         }

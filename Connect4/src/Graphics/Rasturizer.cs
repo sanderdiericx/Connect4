@@ -135,7 +135,7 @@ namespace Connect4.src.Graphics
             int minY = (int)corner1.Y;
             int maxY = (int)corner3.Y;
 
-            for (int y = minY; y <= maxY; y++)
+            for (int y = minY + triangle._borderSize / 2; y <= maxY - triangle._borderSize / 2; y++)
             {
                 // Compute how far along the y axis we are
                 float t = (y - corner1.Y) / (corner3.Y - corner1.Y);
@@ -150,7 +150,7 @@ namespace Connect4.src.Graphics
                     rightX = corner2.X;
                 }
 
-                for (int x = (int) leftX; x <= (int)rightX; x++)
+                for (int x = (int)leftX + triangle._borderSize / 2 - 1; x <= (int)rightX - triangle._borderSize / 2 + 1; x++)
                 {
                     pixels.Add(new PixelData(new Vector2(x, y), PixelType.Filling, triangle._fillColor));
                 }

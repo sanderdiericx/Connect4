@@ -17,5 +17,12 @@
 
             pixels = Rasturizer.ComputeTrianglePixels(this);
         }
+
+        internal override void RecalculatePixels()
+        {
+            base.RecalculatePixels();
+
+            pixels = Rasturizer.ComputeTrianglePixels(this);
+        }
     }
 }

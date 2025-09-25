@@ -1,7 +1,7 @@
-﻿using Connect4.src.Game;
-using Connect4.src.Logs;
+﻿using Connect4.src.Logs;
+using System;
 using System.Drawing;
-using static System.Net.Mime.MediaTypeNames;
+using System.Drawing.Imaging;
 
 namespace Connect4.src.Graphics
 {
@@ -27,6 +27,8 @@ namespace Connect4.src.Graphics
             _windowWidth = width;
             _windowHeight = height;
 
+            _bytesPerPixel = 4; // Standard for argb value
+
             return _instance;
         }
 
@@ -35,6 +37,8 @@ namespace Connect4.src.Graphics
 
         internal static int _windowWidth;
         internal static int _windowHeight;
+
+        internal static int _bytesPerPixel;
 
         internal static void DrawRenderBatch()
         {
@@ -48,13 +52,24 @@ namespace Connect4.src.Graphics
 
         internal static void ClearFrame()
         {
+            Rectangle rect = new Rectangle(0, 0, _frame.Width, _frame.Height);
+            var bmpData = _frame.LockBits(rect, ImageLockMode.ReadWrite, _frame.PixelFormat);
+
             for (int x = 0; x < _frame.Width; x++)
             {
                 for (int y = 0; y < _frame.Height; y++)
                 {
-                    _frame.SetPixel(x, y, Color.White);
+                    // Find the position in memory of this pixel
+                    int index = y * bmpData.Stride + x * _bytesPerPixel;
+
+                    byte[] pixel = { 0, 0, 0, 0 };
+
+                    IntPtr startIndex = bmpData.Scan0; // Get a pointer to the start position of this pixel in memory
+                    System.Runtime.InteropServices.Marshal.Copy(pixel, 0, startIndex + index, 4); // Copy the pixel color data into the right position in memory
                 }
             }
+
+            _frame.UnlockBits(bmpData);
         }
     }
 }

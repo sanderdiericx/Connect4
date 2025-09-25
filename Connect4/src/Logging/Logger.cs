@@ -12,6 +12,13 @@ namespace Connect4.src.Logs
             File.WriteAllText(_fileName, "");
         }
 
+        internal static void LogInfo(string info)
+        {
+            string content = $"({DateTime.Now.ToString()}) INFO: {info}\n";
+
+            File.AppendAllText(_fileName, content);
+        }
+
         internal static void LogException(Exception e)
         {
             string content = $"({DateTime.Now.ToString()}) ERROR: {e.Message}\n{e.StackTrace}\n";

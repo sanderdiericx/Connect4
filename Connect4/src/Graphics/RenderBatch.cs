@@ -35,6 +35,7 @@ namespace Connect4.src.Graphics
         {
             foreach (var sprite in _sprites)
             {
+                sprite.RecalculatePixels();
                 sprite.Draw();
             }
         }
