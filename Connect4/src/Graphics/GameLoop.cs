@@ -19,13 +19,13 @@ namespace Connect4.src.Graphics
         /// </summary>
         internal static void LoadGame()
         {
-            GridLayout gridLayout = new GridLayout(7, 6, 90, 80, 10, Color.Black, Color.WhiteSmoke, 6, true, true);
+            GridLayout gridLayout = new GridLayout(7, 6, 90, 80, 10, Color.Black, Color.WhiteSmoke, 6, false, true);
             _grid = new Grid(gridLayout);
 
             _triangle = new Triangle(new SpriteView(500, 600, Color.Black, Color.Red, 18), 200, 200);
             _triangle.Initialize();
 
-            _circle = new Circle(new SpriteView(700, 600, Color.Black, Color.Yellow, 9), 70);
+            _circle = new Circle(new SpriteView(515, 75, Color.Black, Color.Yellow, 9), 70);
             _circle.Initialize();
 
             _stopWatch = new Stopwatch();
@@ -37,7 +37,7 @@ namespace Connect4.src.Graphics
         /// </summary>
         internal static void UpdateGame()
         {
-            _triangle.Transform(new Vector2(20, -1));
+            _circle.Transform(new Vector2(0, 5));
         }
 
         /// <summary>
@@ -45,32 +45,50 @@ namespace Connect4.src.Graphics
         /// </summary>
         internal static void RenderGame()
         {
-            _stopWatch.Restart();
+            bool tickHit = GraphicsEngine._frameTick == 60;
+
+            if (tickHit)
+            {
+                _stopWatch.Restart();
+            }
 
             GraphicsEngine.ClearFrame();
 
-            _stopWatch.Stop();
-            Logger.LogInfo($"Frame cleared in {_stopWatch.ElapsedMilliseconds}ms");
-            _stopWatch.Restart();
+            if (tickHit)
+            {
+                _stopWatch.Stop();
+                Logger.LogInfo($"Frame cleared in {_stopWatch.ElapsedMilliseconds}ms");
+                _stopWatch.Restart();
+            }
 
             GraphicsEngine.ClearRenderBatch();
 
-            _stopWatch.Stop();
-            Logger.LogInfo($"RenderBatch cleared in {_stopWatch.ElapsedMilliseconds}ms");
-            _stopWatch.Restart();
+            if (tickHit)
+            {
+                _stopWatch.Stop();
+                Logger.LogInfo($"RenderBatch cleared in {_stopWatch.ElapsedMilliseconds}ms");
+                _stopWatch.Restart();
+            }
 
-            GraphicsEngine._renderBatch.AddGrid(_grid);
             GraphicsEngine._renderBatch.AddSprite(_circle);
-            GraphicsEngine._renderBatch.AddSprite(_triangle);
+            GraphicsEngine._renderBatch.AddGrid(_grid);
+            // GraphicsEngine._renderBatch.AddSprite(_triangle);
 
-            _stopWatch.Stop();
-            Logger.LogInfo($"Added sprites to renderbatch in {_stopWatch.ElapsedMilliseconds}ms");
-            _stopWatch.Restart();
 
+            if (tickHit)
+            {
+                _stopWatch.Stop();
+                Logger.LogInfo($"Added sprites to renderbatch in {_stopWatch.ElapsedMilliseconds}ms");
+                _stopWatch.Restart();
+            }
+            
             GraphicsEngine.DrawRenderBatch();
 
-            _stopWatch.Stop();
-            Logger.LogInfo($"drew renderbatch in {_stopWatch.ElapsedMilliseconds}ms");
+            if (tickHit)
+            {
+                _stopWatch.Stop();
+                Logger.LogInfo($"drew renderbatch in {_stopWatch.ElapsedMilliseconds}ms");
+            }
         }
     }
 }

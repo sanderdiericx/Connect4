@@ -21,6 +21,8 @@ namespace Connect4.src.Graphics
             Logger.ClearLogs();
 
             _frame = new Bitmap(width, height);
+            _frameTick = 0;
+
 
             _renderBatch = new RenderBatch();
 
@@ -33,12 +35,27 @@ namespace Connect4.src.Graphics
         }
 
         internal static Bitmap _frame;
+        internal static int _frameTick;
+
         internal static RenderBatch _renderBatch;
 
         internal static int _windowWidth;
         internal static int _windowHeight;
 
         private static int _bytesPerPixel;
+
+
+        internal static void IncrementFrameTick()
+        {
+            if (_frameTick >= 60)
+            {
+                _frameTick = 0;
+            }
+            else
+            {
+                _frameTick++;
+            }
+        }
 
         internal static void DrawRenderBatch()
         {

@@ -38,18 +38,31 @@ namespace Connect4
 
         private void FrameTimer_Tick(object sender, EventArgs e)
         {
-            _stopwatch.Restart();
+            GraphicsEngine.IncrementFrameTick();
+
+            bool tickHit = GraphicsEngine._frameTick == 60;
+
+            if (tickHit)
+            {
+                _stopwatch.Restart();
+            }
 
             GameLoop.UpdateGame();
 
-            _stopwatch.Stop();
-            Logger.LogInfo($"Game updated in {_stopwatch.ElapsedMilliseconds}ms");
-            _stopwatch.Restart();
+            if (tickHit)
+            {
+                _stopwatch.Stop();
+                Logger.LogInfo($"Game updated in {_stopwatch.ElapsedMilliseconds}ms");
+                _stopwatch.Restart();
+            }
 
             GameLoop.RenderGame();
 
-            _stopwatch.Stop();
-            Logger.LogInfo($"Game rendered in {_stopwatch.ElapsedMilliseconds}ms");
+            if (tickHit)
+            {
+                _stopwatch.Stop();
+                Logger.LogInfo($"Game rendered in {_stopwatch.ElapsedMilliseconds}ms");
+            }
 
             Invalidate(); // Force the form to repaint
         }
