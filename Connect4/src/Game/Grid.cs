@@ -1,5 +1,5 @@
-﻿using Connect4.src.Graphics.Sprites;
-using Connect4.src.Graphics;
+﻿using Connect4.src.Graphics;
+using Connect4.src.Graphics.Sprites;
 
 namespace Connect4.src.Game
 {
@@ -7,7 +7,7 @@ namespace Connect4.src.Game
     {
         private GridLayout _gridLayout;
 
-        internal Sprite[,] _gameGrid;
+        internal GridCell[,] _grid;
 
         internal Grid(GridLayout gridLayout)
         {
@@ -18,7 +18,7 @@ namespace Connect4.src.Game
 
         private void GenerateGameGridRectangles()
         {
-            _gameGrid = new Rectangle[_gridLayout._columns, _gridLayout._rows];
+            _grid = new GridCell[_gridLayout._columns, _gridLayout._rows];
 
             int rectangleWidth = (GraphicsEngine._windowWidth - (_gridLayout._padding * 2) - (_gridLayout._offset * _gridLayout._columns)) / _gridLayout._columns;
             int rectangleHeight = (GraphicsEngine._windowHeight - _gridLayout._gap - (_gridLayout._padding * 2) - (_gridLayout._offset * _gridLayout._rows)) / _gridLayout._rows;
@@ -37,7 +37,7 @@ namespace Connect4.src.Game
                     rectangle._hasBorder = _gridLayout._hasBorder;
                     rectangle._isFilled = _gridLayout._isFilled;
 
-                    _gameGrid[col, row] = rectangle;
+                    _grid[col, row] = new GridCell(rectangle, CellType.Empty);
                 }
             }
         }

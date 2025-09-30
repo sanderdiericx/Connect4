@@ -25,9 +25,9 @@ namespace Connect4.src.Graphics
 
         internal void AddGrid(Grid grid)
         {
-            foreach (var rectangle in grid._gameGrid)
+            foreach (GridCell gridCell in grid._grid)
             {
-                _sprites.Add(rectangle);
+                _sprites.Add(gridCell._cellRectangle);
             }
         }
 
