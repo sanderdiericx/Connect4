@@ -12,11 +12,7 @@ namespace Connect4.src.Graphics
         private static Grid _grid;
         private static Triangle _triangle;
         private static Circle _circle;
-        private static Stopwatch _stopWatch;
 
-        /// <summary>
-        /// Run loading code here!
-        /// </summary>
         internal static void LoadGame()
         {
             GridLayout gridLayout = new GridLayout(7, 6, 90, 80, 10, Color.Black, Color.WhiteSmoke, 6, false, true);
@@ -27,68 +23,24 @@ namespace Connect4.src.Graphics
 
             _circle = new Circle(new SpriteView(515, 75, Color.Black, Color.Yellow, 9), 70);
             _circle.Initialize();
-
-            _stopWatch = new Stopwatch();
         }
 
-
-        /// <summary>
-        /// Run game update code here!
-        /// </summary>
         internal static void UpdateGame()
         {
-            _circle.Transform(new Vector2(0, 5));
+            _circle.Transform(new Vector2(0, 100 * GraphicsEngine._deltaTime));
         }
 
-        /// <summary>
-        /// Run render code here!
-        /// </summary>
+
         internal static void RenderGame()
         {
-            bool tickHit = GraphicsEngine._frameTick == 60;
-
-            if (tickHit)
-            {
-                _stopWatch.Restart();
-            }
-
             GraphicsEngine.ClearFrame();
-
-            if (tickHit)
-            {
-                _stopWatch.Stop();
-                Logger.LogInfo($"Frame cleared in {_stopWatch.ElapsedMilliseconds}ms");
-                _stopWatch.Restart();
-            }
-
             GraphicsEngine.ClearRenderBatch();
-
-            if (tickHit)
-            {
-                _stopWatch.Stop();
-                Logger.LogInfo($"RenderBatch cleared in {_stopWatch.ElapsedMilliseconds}ms");
-                _stopWatch.Restart();
-            }
 
             GraphicsEngine._renderBatch.AddSprite(_circle);
             GraphicsEngine._renderBatch.AddGrid(_grid);
             // GraphicsEngine._renderBatch.AddSprite(_triangle);
-
-
-            if (tickHit)
-            {
-                _stopWatch.Stop();
-                Logger.LogInfo($"Added sprites to renderbatch in {_stopWatch.ElapsedMilliseconds}ms");
-                _stopWatch.Restart();
-            }
             
             GraphicsEngine.DrawRenderBatch();
-
-            if (tickHit)
-            {
-                _stopWatch.Stop();
-                Logger.LogInfo($"drew renderbatch in {_stopWatch.ElapsedMilliseconds}ms");
-            }
         }
     }
 }

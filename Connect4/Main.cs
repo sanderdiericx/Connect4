@@ -10,7 +10,7 @@ namespace Connect4
 {
     public partial class Main : Form
     {
-        private Stopwatch _stopwatch;
+        private Stopwatch _elapsedTime;
 
         public Main()
         {
@@ -18,13 +18,13 @@ namespace Connect4
         }
 
         private void Form1_Load(object sender, EventArgs e)
-        {
-            _stopwatch = new Stopwatch();
-
+        { 
             Paint += Main_Paint;
             DoubleBuffered = true;
 
             GraphicsEngine.Start(Width, Height);
+
+            GameLoop.LoadGame();
 
             // Set up frame timer
             Timer frameTimer = new Timer();
@@ -33,36 +33,16 @@ namespace Connect4
             frameTimer.Tick += FrameTimer_Tick;
             frameTimer.Start();
 
-            GameLoop.LoadGame();
+            _elapsedTime = new Stopwatch();
+            _elapsedTime.Start();
         }
 
         private void FrameTimer_Tick(object sender, EventArgs e)
         {
-            GraphicsEngine.IncrementFrameTick();
-
-            bool tickHit = GraphicsEngine._frameTick == 60;
-
-            if (tickHit)
-            {
-                _stopwatch.Restart();
-            }
+            GraphicsEngine.SetDeltaTime((float)_elapsedTime.Elapsed.TotalSeconds);
 
             GameLoop.UpdateGame();
-
-            if (tickHit)
-            {
-                _stopwatch.Stop();
-                Logger.LogInfo($"Game updated in {_stopwatch.ElapsedMilliseconds}ms");
-                _stopwatch.Restart();
-            }
-
             GameLoop.RenderGame();
-
-            if (tickHit)
-            {
-                _stopwatch.Stop();
-                Logger.LogInfo($"Game rendered in {_stopwatch.ElapsedMilliseconds}ms");
-            }
 
             Invalidate(); // Force the form to repaint
         }
