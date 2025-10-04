@@ -8,7 +8,6 @@ namespace Connect4.src.Graphics
     {
         private static Grid _grid;
         private static Circle _marker;
-        private static Circle _marker2;
 
         internal static void LoadGame()
         {
@@ -16,7 +15,6 @@ namespace Connect4.src.Graphics
             _grid = new Grid(gridLayout);
 
             _marker = ConnectFour.SetGridCell(_grid, 4, 4, CellType.Red);
-            _marker2 = ConnectFour.SetGridCell(_grid, 4, 2, CellType.Yellow);
         }
 
         internal static void UpdateGame()
@@ -29,9 +27,8 @@ namespace Connect4.src.Graphics
             GraphicsEngine.ClearFrame();
             GraphicsEngine.ClearRenderBatch();
 
-            GraphicsEngine._renderBatch.AddSprite(_marker);
-            GraphicsEngine._renderBatch.AddSprite(_marker2);
-            GraphicsEngine._renderBatch.AddGrid(_grid);
+            GraphicsEngine.AddSpriteToQueue(_marker);
+            GraphicsEngine.AddSpritesToQueue(_grid.GetSprites());
 
             GraphicsEngine.DrawRenderBatch();
         }

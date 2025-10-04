@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using Connect4.src.Graphics.Sprites;
 using Connect4.src.Game;
+using System.Windows.Forms;
 
 namespace Connect4.src.Graphics
 {
     internal class RenderBatch
     {
-        private readonly List<Sprite> _sprites;
+        internal readonly List<Sprite> _sprites;
 
         internal void Clear()
         {
@@ -16,19 +17,6 @@ namespace Connect4.src.Graphics
         internal RenderBatch()
         {
             _sprites = new List<Sprite>();
-        }
-
-        internal void AddSprite(Sprite sprite)
-        {
-            _sprites.Add(sprite);
-        }
-
-        internal void AddGrid(Grid grid)
-        {
-            foreach (GridCell gridCell in grid._grid)
-            {
-                _sprites.Add(gridCell._cellRectangle);
-            }
         }
 
         internal void Draw()

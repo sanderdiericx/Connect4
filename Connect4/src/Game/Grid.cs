@@ -1,11 +1,12 @@
 ﻿using Connect4.src.Graphics;
 using Connect4.src.Graphics.Sprites;
+using System.Collections.Generic;
 
 namespace Connect4.src.Game
 {
     internal class Grid
     {
-        private GridLayout _gridLayout;
+        internal GridLayout _gridLayout;
 
         internal GridCell[,] _grid;
 
@@ -14,6 +15,18 @@ namespace Connect4.src.Game
             _gridLayout = gridLayout;
 
             GenerateGameGridRectangles();
+        }
+
+        internal List<Sprite> GetSprites()
+        {
+            List<Sprite> sprites = new List<Sprite>();
+
+            foreach (GridCell gridCell in _grid)
+            {
+                sprites.Add(gridCell._cellRectangle);
+            }
+
+            return sprites;
         }
 
         private void GenerateGameGridRectangles()

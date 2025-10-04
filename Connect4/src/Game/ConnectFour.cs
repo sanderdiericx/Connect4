@@ -16,9 +16,10 @@ namespace Connect4.src.Game
             Circle marker = null;
             if (cellType != CellType.Empty)
             {
-                SpriteView spriteView;
+                int markerXPosition = (int)cellRectangle._xPosition + (cellRectangle._width / 2);
+                int markerYPosition = grid._gridLayout._gap;
 
-                spriteView = new SpriteView(cellRectangle._xPosition + (cellRectangle._width / 2), cellRectangle._yPosition + (cellRectangle._height / 2), Color.Black, cellType == CellType.Yellow ? Color.Yellow : Color.Red, 8);
+                SpriteView spriteView = new SpriteView(markerXPosition, markerYPosition, Color.Black, cellType == CellType.Yellow ? Color.Yellow : Color.Red, 8);
  
                 marker = new Circle(spriteView, cellRectangle._width / cellRectangle._height * (cellRectangle._height - cellRectangle._height / 6) / 2);
                 marker.Initialize();

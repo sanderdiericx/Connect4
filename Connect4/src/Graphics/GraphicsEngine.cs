@@ -1,5 +1,7 @@
-﻿using Connect4.src.Logs;
+﻿using Connect4.src.Graphics.Sprites;
+using Connect4.src.Logs;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 
@@ -36,7 +38,7 @@ namespace Connect4.src.Graphics
 
         internal static Bitmap _frame;
 
-        internal static RenderBatch _renderBatch;
+        private static RenderBatch _renderBatch;
 
         internal static int _windowWidth;
         internal static int _windowHeight;
@@ -54,6 +56,19 @@ namespace Connect4.src.Graphics
         internal static void ClearRenderBatch()
         {
             _renderBatch.Clear();
+        }
+
+        internal static void AddSpriteToQueue(Sprite sprite)
+        {
+            _renderBatch._sprites.Add(sprite);
+        }
+
+        internal static void AddSpritesToQueue(IEnumerable<Sprite> sprites)
+        {
+            foreach (Sprite sprite in sprites)
+            {
+                _renderBatch._sprites.Add(sprite);
+            }
         }
 
         internal static void SetDeltaTime(float elapsedTime)

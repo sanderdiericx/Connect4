@@ -1,17 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using Connect4.src.Logs;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Numerics;
-using System;
-using Connect4.src.Logs;
-using System.Linq;
 using System.Drawing.Imaging;
+using System.Numerics;
 
 namespace Connect4.src.Graphics.Sprites
 {
     internal abstract class Sprite
     {
         protected List<PixelData> pixels;
-        
+
         private bool _isInitialized;
 
         internal float _xPosition;
