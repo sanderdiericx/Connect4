@@ -1,5 +1,5 @@
 ﻿using Connect4.src.Game;
-using Connect4.src.Graphics.Sprites;
+using System;
 using System.Drawing;
 
 namespace Connect4.src.Graphics
@@ -7,19 +7,19 @@ namespace Connect4.src.Graphics
     internal class GameLoop
     {
         private static Grid _grid;
-        private static Circle _marker;
 
         internal static void LoadGame()
         {
             GridLayout gridLayout = new GridLayout(7, 6, 90, 80, 10, Color.Black, Color.WhiteSmoke, 6, false, true);
             _grid = new Grid(gridLayout);
 
-            _marker = ConnectFour.SetGridCell(_grid, 4, 4, CellType.Red);
+            Func<float, float> easingFunction = input => input * input;
+            ConnectFour.SetGridCell(_grid, 6, 5, CellType.Red, easingFunction, 0.7f);
         }
 
         internal static void UpdateGame()
         {
-
+            GraphicsEngine.UpdateAnimations();
         }
 
         internal static void RenderGame()
@@ -27,7 +27,6 @@ namespace Connect4.src.Graphics
             GraphicsEngine.ClearFrame();
             GraphicsEngine.ClearRenderBatch();
 
-            GraphicsEngine.AddSpriteToQueue(_marker);
             GraphicsEngine.AddSpritesToQueue(_grid.GetSprites());
 
             GraphicsEngine.DrawRenderBatch();

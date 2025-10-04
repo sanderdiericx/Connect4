@@ -1,22 +1,21 @@
-﻿using System.Collections.Generic;
-using Connect4.src.Graphics.Sprites;
-using Connect4.src.Game;
-using System.Windows.Forms;
+﻿using Connect4.src.Graphics.Sprites;
+using System.Collections.Generic;
 
 namespace Connect4.src.Graphics
 {
+    // Renderbatch holds all sprites that need to be drawn each frame
     internal class RenderBatch
     {
         internal readonly List<Sprite> _sprites;
 
-        internal void Clear()
-        {
-            _sprites.Clear();
-        }
-
         internal RenderBatch()
         {
             _sprites = new List<Sprite>();
+        }
+
+        internal void Clear()
+        {
+            _sprites.Clear();
         }
 
         internal void Draw()
@@ -27,7 +26,10 @@ namespace Connect4.src.Graphics
 
             foreach (var sprite in _sprites)
             {
-                sprite.Draw(bmpData);
+                if (sprite != null)
+                {
+                    sprite.Draw(bmpData);
+                }
             }
 
             GraphicsEngine._frame.UnlockBits(bmpData);

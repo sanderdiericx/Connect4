@@ -39,6 +39,21 @@ namespace Connect4.src.Graphics.Sprites
             _borderSize = spriteView._borderSize;
         }
 
+        internal void SetPosition(Vector2 position)
+        {
+            Vector2 delta = position - new Vector2(_xPosition, _yPosition); // Calculate the difference from current position
+
+            _xPosition = position.X;
+            _yPosition = position.Y;
+
+            // Move pixels by the same delta
+            for (int i = 0; i < pixels.Count; i++)
+            {
+                pixels[i]._pixelPosition += delta;
+            }
+        }
+
+
         internal void Transform(Vector2 transform)
         {
             _xPosition += transform.X;
@@ -54,13 +69,6 @@ namespace Connect4.src.Graphics.Sprites
         // Initialize builds pixel data for sprites, initialize can also be called to reset sprite size, border color and fillcolor
         internal virtual void Initialize()
         {
-            if (_isInitialized)
-            {
-                Logger.LogWarning("Sprite already initialized!");
-
-                return; // Return so that Initialize() doesnt run in subclasses
-            }
-
             _isInitialized = true;
         }
 

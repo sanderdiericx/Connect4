@@ -25,6 +25,7 @@ namespace Connect4.src.Graphics
             _frame = new Bitmap(width, height);
 
             _renderBatch = new RenderBatch();
+            _animationBatch = new AnimationBatch();
 
             _windowWidth = width;
             _windowHeight = height;
@@ -39,6 +40,7 @@ namespace Connect4.src.Graphics
         internal static Bitmap _frame;
 
         private static RenderBatch _renderBatch;
+        private static AnimationBatch _animationBatch;
 
         internal static int _windowWidth;
         internal static int _windowHeight;
@@ -47,6 +49,16 @@ namespace Connect4.src.Graphics
         private static float _lastElapsedTime;
 
         private static int _bytesPerPixel;
+
+        internal static void StartAnimation(Animation animation)
+        {
+            _animationBatch._animations.Add(animation);
+        }
+
+        internal static void UpdateAnimations()
+        {
+            _animationBatch.Animate();
+        }
 
         internal static void DrawRenderBatch()
         {
@@ -79,7 +91,7 @@ namespace Connect4.src.Graphics
 
         internal static void ClearFrame()
         {
-            Rectangle rect = new Rectangle(0, 0, _frame.Width, _frame.Height);
+            System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, _frame.Width, _frame.Height);
             var bmpData = _frame.LockBits(rect, ImageLockMode.ReadWrite, _frame.PixelFormat);
 
             int bytes = bmpData.Stride * _frame.Height; // Calculate the amount of bytes in the frame

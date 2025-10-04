@@ -1,5 +1,5 @@
-﻿using System.Numerics;
-using System.Drawing;
+﻿using System.Drawing;
+using System.Numerics;
 
 namespace Connect4.src.Graphics
 {

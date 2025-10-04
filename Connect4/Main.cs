@@ -1,9 +1,6 @@
-﻿using Connect4.src.Game;
-using Connect4.src.Graphics;
-using Connect4.src.Logs;
+﻿using Connect4.src.Graphics;
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace Connect4
@@ -18,7 +15,7 @@ namespace Connect4
         }
 
         private void Form1_Load(object sender, EventArgs e)
-        { 
+        {
             Paint += Main_Paint;
             DoubleBuffered = true;
 

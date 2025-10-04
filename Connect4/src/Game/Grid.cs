@@ -8,7 +8,7 @@ namespace Connect4.src.Game
     {
         internal GridLayout _gridLayout;
 
-        internal GridCell[,] _grid;
+        internal GridCell[,] _gridCells;
 
         internal Grid(GridLayout gridLayout)
         {
@@ -21,7 +21,13 @@ namespace Connect4.src.Game
         {
             List<Sprite> sprites = new List<Sprite>();
 
-            foreach (GridCell gridCell in _grid)
+            // Make sure cellMarkers are rendered before cellRectangles
+            foreach (GridCell gridCell in _gridCells)
+            {
+                sprites.Add(gridCell._cellMarker);
+            }
+
+            foreach (GridCell gridCell in _gridCells)
             {
                 sprites.Add(gridCell._cellRectangle);
             }
@@ -31,7 +37,7 @@ namespace Connect4.src.Game
 
         private void GenerateGameGridRectangles()
         {
-            _grid = new GridCell[_gridLayout._columns, _gridLayout._rows];
+            _gridCells = new GridCell[_gridLayout._columns, _gridLayout._rows];
 
             int rectangleWidth = (GraphicsEngine._windowWidth - (_gridLayout._padding * 2) - (_gridLayout._offset * _gridLayout._columns)) / _gridLayout._columns;
             int rectangleHeight = (GraphicsEngine._windowHeight - _gridLayout._gap - (_gridLayout._padding * 2) - (_gridLayout._offset * _gridLayout._rows)) / _gridLayout._rows;
@@ -50,7 +56,7 @@ namespace Connect4.src.Game
                     rectangle._hasBorder = _gridLayout._hasBorder;
                     rectangle._isFilled = _gridLayout._isFilled;
 
-                    _grid[col, row] = new GridCell(rectangle, CellType.Empty);
+                    _gridCells[col, row] = new GridCell(rectangle, null, CellType.Empty);
                 }
             }
         }
