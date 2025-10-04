@@ -1,6 +1,11 @@
 ﻿using Connect4.src.Graphics;
 using Connect4.src.Graphics.Sprites;
+using Connect4.src.Logs;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Numerics;
+using Rectangle = Connect4.src.Graphics.Sprites.Rectangle;
 
 namespace Connect4.src.Game
 {
@@ -34,6 +39,39 @@ namespace Connect4.src.Game
 
             return sprites;
         }
+
+        internal void SetGridCell(int col, int row, CellType cellType, Func<float, float> easingFunction, float animationSpeed)
+        {
+            if (row >= _gridLayout._rows || col >= _gridLayout._columns)
+            {
+                Logger.LogWarning("Selected grid cell is outside grid boundaries!");
+                return;
+            }
+
+            _gridCells[col, row]._cellType = cellType;
+
+            if (cellType != CellType.Empty)
+            {
+                Rectangle cellRectangle = _gridCells[col, row]._cellRectangle;
+
+                int markerXPosition = (int)cellRectangle._xPosition + (cellRectangle._width / 2);
+                int markerYPosition = _gridLayout._gap;
+
+                // Create the marker at the correct position
+                SpriteView spriteView = new SpriteView(markerXPosition, markerYPosition, Color.Black, cellType == CellType.Yellow ? Color.Yellow : Color.Red, 8);
+                Circle marker = new Circle(spriteView, cellRectangle._width / cellRectangle._height * (cellRectangle._height - cellRectangle._height / 6) / 2);
+                marker.Initialize();
+
+                // Create an animation to drop the marker onto the grid
+                Animation animation = new Animation(marker, new Vector2(markerXPosition, (int)cellRectangle._yPosition + (cellRectangle._height / 2)), animationSpeed, easingFunction);
+                GraphicsEngine.StartAnimation(animation);
+
+                // Asign the newly created marker to the correct spot in the grid
+                _gridCells[col, row]._cellMarker = marker;
+            }
+        }
+
+
 
         private void GenerateGameGridRectangles()
         {

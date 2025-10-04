@@ -59,12 +59,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\Game\ConnectFour.cs" />
     <Compile Include="src\Game\GridCell.cs" />
     <Compile Include="src\Game\Grid.cs" />
     <Compile Include="src\Game\GridLayout.cs" />
     <Compile Include="src\Game\CellType.cs" />
     <Compile Include="src\Graphics\Animation.cs" />
+    <Compile Include="src\Graphics\EasingFunctions.cs" />
     <Compile Include="src\Graphics\GameLoop.cs" />
     <Compile Include="src\Graphics\GraphicsEngine.cs" />
     <Compile Include="src\Graphics\PixelData.cs" />

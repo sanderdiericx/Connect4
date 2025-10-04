@@ -7,22 +7,22 @@ namespace Connect4.src.Graphics
     internal class Animation
     {
         private Sprite _sprite;
-        private float _startY;
-        private float _endY;
+        private Vector2 _startPosition;
+        private Vector2 _endPosition;
         private float _speed;
         private float _t;
         private Func<float, float> _easingFunction;
 
         internal bool _animationDone;
 
-        internal Animation(Sprite sprite, float targetY, float speed, Func<float, float> easingFunction)
+        internal Animation(Sprite sprite, Vector2 endPosition, float speed, Func<float, float> easingFunction)
         {
             _sprite = sprite;
-            _endY = targetY;
+            _endPosition = endPosition;
             _speed = speed;
             _easingFunction = easingFunction;
 
-            _startY = sprite._yPosition;
+            _startPosition = new Vector2(sprite._xPosition, sprite._yPosition);
             _t = 0;
             _animationDone = false;
         }
@@ -34,15 +34,15 @@ namespace Connect4.src.Graphics
 
             float easedT = _easingFunction(_t);
 
-            float currentYPosition = _startY + (_endY - _startY) * easedT;
+            Vector2 currentPosition = _startPosition + (_endPosition - _startPosition) * easedT;
 
             if (_t <= 1f) // Check if animation is completed
             {
-                _sprite.SetPosition(new Vector2(_sprite._xPosition, currentYPosition));
+                _sprite.SetPosition(currentPosition);
             }
             else
             {
-                _sprite.SetPosition(new Vector2(_sprite._xPosition, _endY));
+                _sprite.SetPosition(_endPosition);
                 _animationDone = true;
             }
         }

@@ -13,8 +13,7 @@ namespace Connect4.src.Graphics
             GridLayout gridLayout = new GridLayout(7, 6, 90, 80, 10, Color.Black, Color.WhiteSmoke, 6, false, true);
             _grid = new Grid(gridLayout);
 
-            Func<float, float> easingFunction = input => input * input;
-            ConnectFour.SetGridCell(_grid, 6, 5, CellType.Red, easingFunction, 0.7f);
+            _grid.SetGridCell(6, 5, CellType.Red, EasingFunctions.GetEaseOutBounce(), 0.5f);
         }
 
         internal static void UpdateGame()
