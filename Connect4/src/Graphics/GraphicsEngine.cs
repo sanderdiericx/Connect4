@@ -29,6 +29,7 @@ namespace Connect4.src.Graphics
 
             _windowWidth = width;
             _windowHeight = height;
+            _isMouseInside = false;
 
             _bytesPerPixel = 4; // Standard for argb value
 
@@ -44,6 +45,7 @@ namespace Connect4.src.Graphics
 
         internal static int _windowWidth;
         internal static int _windowHeight;
+        internal static bool _isMouseInside;
 
         internal static float _deltaTime;
         private static float _lastElapsedTime;

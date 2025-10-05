@@ -63,6 +63,7 @@
     <Compile Include="src\Game\Grid.cs" />
     <Compile Include="src\Game\GridLayout.cs" />
     <Compile Include="src\Game\CellType.cs" />
+    <Compile Include="src\Game\Indicator.cs" />
     <Compile Include="src\Graphics\Animation.cs" />
     <Compile Include="src\Graphics\EasingFunctions.cs" />
     <Compile Include="src\Graphics\GameLoop.cs" />

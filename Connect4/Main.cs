@@ -48,5 +48,15 @@ namespace Connect4
         {
             e.Graphics.DrawImage(GraphicsEngine._frame, 0, 0);
         }
+
+        private void Main_MouseEnter(object sender, EventArgs e)
+        {
+            GraphicsEngine._isMouseInside = true;
+        }
+
+        private void Main_MouseLeave(object sender, EventArgs e)
+        {
+            GraphicsEngine._isMouseInside = false;
+        }
     }
 }

@@ -55,10 +55,10 @@ namespace Connect4.src.Game
                 Rectangle cellRectangle = _gridCells[col, row]._cellRectangle;
 
                 int markerXPosition = (int)cellRectangle._xPosition + (cellRectangle._width / 2);
-                int markerYPosition = _gridLayout._gap;
+                int markerYPosition = -100; // Spawn offscreen
 
                 // Create the marker at the correct position
-                SpriteView spriteView = new SpriteView(markerXPosition, markerYPosition, Color.Black, cellType == CellType.Yellow ? Color.Yellow : Color.Red, 8);
+                SpriteView spriteView = new SpriteView(markerXPosition, markerYPosition, Color.Black, cellType == CellType.Yellow ? Color.Gold : Color.Firebrick, 8);
                 Circle marker = new Circle(spriteView, cellRectangle._width / cellRectangle._height * (cellRectangle._height - cellRectangle._height / 6) / 2);
                 marker.Initialize();
 
