@@ -39,6 +39,23 @@ namespace Connect4.src.Graphics.Sprites
             _borderSize = spriteView._borderSize;
         }
 
+        internal void SetFillColor(Color fillColor)
+        {
+            foreach (var pixel in pixels)
+            {
+                pixel._pixelColor = fillColor;
+            }
+        }
+
+        internal void SetBorderColor(Color borderColor)
+        {
+            foreach (var pixel in pixels)
+            {
+                pixel._pixelColor = borderColor;
+            }
+        }
+
+
         internal void SetPosition(Vector2 position)
         {
             Vector2 delta = position - new Vector2(_xPosition, _yPosition); // Calculate the difference from current position

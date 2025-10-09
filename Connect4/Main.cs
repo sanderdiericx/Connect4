@@ -37,6 +37,7 @@ namespace Connect4
         private void FrameTimer_Tick(object sender, EventArgs e)
         {
             GraphicsEngine.SetDeltaTime((float)_elapsedTime.Elapsed.TotalSeconds);
+            GraphicsEngine._windowMousePosition = PointToClient(Cursor.Position);
 
             GameLoop.UpdateGame();
             GameLoop.RenderGame();

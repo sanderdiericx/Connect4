@@ -27,6 +27,7 @@ namespace Connect4.src.Graphics
             _renderBatch = new RenderBatch();
             _animationBatch = new AnimationBatch();
 
+            _windowMousePosition = new Point(0, 0);
             _windowWidth = width;
             _windowHeight = height;
             _isMouseInside = false;
@@ -43,6 +44,7 @@ namespace Connect4.src.Graphics
         private static RenderBatch _renderBatch;
         private static AnimationBatch _animationBatch;
 
+        internal static Point _windowMousePosition;
         internal static int _windowWidth;
         internal static int _windowHeight;
         internal static bool _isMouseInside;
@@ -91,6 +93,7 @@ namespace Connect4.src.Graphics
             _lastElapsedTime = elapsedTime;
         }
 
+        // Clears the current frame bitmap
         internal static void ClearFrame()
         {
             System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, _frame.Width, _frame.Height);

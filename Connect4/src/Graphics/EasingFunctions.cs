@@ -8,6 +8,7 @@ namespace Connect4.src.Graphics
 {
     internal static class EasingFunctions
     {
+        // Returns a easing function that causes a bounce effect
         internal static Func<float, float> GetEaseOutBounce()
         {
             Func<float, float> easeOutBounce = x =>

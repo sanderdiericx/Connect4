@@ -11,6 +11,9 @@ namespace Connect4.src.Graphics
         private static Grid _grid;
         private static Indicator _indicator;
 
+        // Game variables
+        private static bool _playerTurn;
+
         internal static void LoadGame()
         {
             GridLayout gridLayout = new GridLayout(7, 6, 90, 80, 10, Color.Black, Color.WhiteSmoke, 6, false, true);
@@ -18,15 +21,19 @@ namespace Connect4.src.Graphics
 
             _grid.SetGridCell(3, 5, CellType.Red, EasingFunctions.GetEaseOutBounce(), 0.5f);
 
-            _indicator = new Indicator(gridLayout, 75, Color.Black, Color.DimGray, 12);
+            _indicator = new Indicator(_grid, gridLayout, 75, Color.Black, Color.Firebrick, 12);
+
+            _playerTurn = true;
         }
 
         internal static void UpdateGame()
         {
             if (GraphicsEngine._isMouseInside)
             {
-                _indicator.UpdatePosition(Cursor.Position.X);
+                _indicator.UpdatePosition();
             }
+
+            _grid.HighlightSelectedCell(Color.Firebrick);
 
             GraphicsEngine.UpdateAnimations();
         }

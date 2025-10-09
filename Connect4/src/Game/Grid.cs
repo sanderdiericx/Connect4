@@ -12,16 +12,39 @@ namespace Connect4.src.Game
     internal class Grid
     {
         internal GridLayout _gridLayout;
-
         internal GridCell[,] _gridCells;
+        internal int[] _rectangleCenterPositions;
+        private (int col, int row) lastHighlight;
 
         internal Grid(GridLayout gridLayout)
         {
             _gridLayout = gridLayout;
 
+            lastHighlight = (0, 0);
+
             GenerateGameGridRectangles();
+            GenerateRectangleCenterPositions();
         }
 
+        // Highlights the currently indicated cell
+        internal void HighlightSelectedCell(Color highlightColor)
+        {
+            int col = GetClosestIndex();
+            int row = FindFurthestCell(col);
+
+            _gridCells[col, row]._cellRectangle.SetBorderColor(highlightColor);
+
+            // Reset the last highlighted cell if it the indicated cell changed
+            if (lastHighlight.col != col || lastHighlight.row != row)
+            {
+                _gridCells[lastHighlight.col, lastHighlight.row]._cellRectangle.SetBorderColor(_gridLayout._borderColor);
+            }
+
+            lastHighlight = (col, row);
+        }
+
+
+        // Converts the gridcell structure into a list of sprites
         internal List<Sprite> GetSprites()
         {
             List<Sprite> sprites = new List<Sprite>();
@@ -40,6 +63,47 @@ namespace Connect4.src.Game
             return sprites;
         }
 
+        // Loops through a column and find the furthest cell without a marker, returns -1 if no available cells were found
+        internal int FindFurthestCell(int col)
+        {
+            bool cellFound = false;
+            int rowIndex = -1;
+
+            for (int row = _gridLayout._rows - 1; row >= 0; row--)
+            {
+                if (!cellFound && _gridCells[col, row]._cellType == CellType.Empty)
+                {
+                    cellFound = true;
+                    rowIndex = row;
+                }
+            }
+
+            return rowIndex;
+        }
+
+
+        // Returns the column index which the mouse is closest to
+        internal int GetClosestIndex()
+        {
+            // Find the closest center position to the mouse
+            int closestIndex = 0;
+            int closestDistance = Math.Abs(GraphicsEngine._windowMousePosition.X - _rectangleCenterPositions[0]);
+
+            for (int i = 0; i < _rectangleCenterPositions.Length; i++)
+            {
+                int distance = Math.Abs(GraphicsEngine._windowMousePosition.X - _rectangleCenterPositions[i]);
+
+                if (distance < closestDistance)
+                {
+                    closestDistance = Math.Abs(distance);
+                    closestIndex = i;
+                }
+            }
+
+            return closestIndex;
+        }
+
+        // Fills a specified index in the grid with a game marker
         internal void SetGridCell(int col, int row, CellType cellType, Func<float, float> easingFunction, float animationSpeed)
         {
             if (row >= _gridLayout._rows || col >= _gridLayout._columns)
@@ -71,8 +135,23 @@ namespace Connect4.src.Game
             }
         }
 
+        // Fills an array with each x position for each column in the grid
+        private void GenerateRectangleCenterPositions()
+        {
+            _rectangleCenterPositions = new int[_gridLayout._columns];
+
+            for (int col = 0; col < _gridLayout._columns; col++)
+            {
+                // Calculate x position based off grid layout paramaters
+                int rectangleWidth = (GraphicsEngine._windowWidth - (_gridLayout._padding * 2) - (_gridLayout._offset * _gridLayout._columns)) / _gridLayout._columns;
+                int x = (_gridLayout._padding + col * (rectangleWidth + _gridLayout._offset)) + rectangleWidth / 2;
+
+                _rectangleCenterPositions[col] = x;
+            }
+        }
 
 
+        // Create the grid of rectangles
         private void GenerateGameGridRectangles()
         {
             _gridCells = new GridCell[_gridLayout._columns, _gridLayout._rows];
