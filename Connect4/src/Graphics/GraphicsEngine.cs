@@ -30,7 +30,9 @@ namespace Connect4.src.Graphics
             _windowMousePosition = new Point(0, 0);
             _windowWidth = width;
             _windowHeight = height;
+
             _isMouseInside = false;
+            _isMouseDown = false;
 
             _bytesPerPixel = 4; // Standard for argb value
 
@@ -48,6 +50,7 @@ namespace Connect4.src.Graphics
         internal static int _windowWidth;
         internal static int _windowHeight;
         internal static bool _isMouseInside;
+        internal static bool _isMouseDown;
 
         internal static float _deltaTime;
         private static float _lastElapsedTime;

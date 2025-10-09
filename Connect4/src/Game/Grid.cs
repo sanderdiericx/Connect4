@@ -32,15 +32,18 @@ namespace Connect4.src.Game
             int col = GetClosestIndex();
             int row = FindFurthestCell(col);
 
-            _gridCells[col, row]._cellRectangle.SetBorderColor(highlightColor);
-
-            // Reset the last highlighted cell if it the indicated cell changed
+            // Reset the last highlighted cell if the indicated cell changed
             if (lastHighlight.col != col || lastHighlight.row != row)
             {
                 _gridCells[lastHighlight.col, lastHighlight.row]._cellRectangle.SetBorderColor(_gridLayout._borderColor);
             }
 
-            lastHighlight = (col, row);
+            if (row != -1)
+            {
+                _gridCells[col, row]._cellRectangle.SetBorderColor(highlightColor);
+
+                lastHighlight = (col, row);
+            }
         }
 
 
@@ -95,7 +98,7 @@ namespace Connect4.src.Game
 
                 if (distance < closestDistance)
                 {
-                    closestDistance = Math.Abs(distance);
+                    closestDistance = distance;
                     closestIndex = i;
                 }
             }
@@ -106,7 +109,7 @@ namespace Connect4.src.Game
         // Fills a specified index in the grid with a game marker
         internal void SetGridCell(int col, int row, CellType cellType, Func<float, float> easingFunction, float animationSpeed)
         {
-            if (row >= _gridLayout._rows || col >= _gridLayout._columns)
+            if (row >= _gridLayout._rows || col >= _gridLayout._columns || row < 0 || col < 0)
             {
                 Logger.LogWarning("Selected grid cell is outside grid boundaries!");
                 return;

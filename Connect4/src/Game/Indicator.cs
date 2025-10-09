@@ -15,9 +15,15 @@ namespace Connect4.src.Game
             _rectangleCenterPositions = grid._rectangleCenterPositions;
             _grid = grid;
 
-            SpriteView spriteView = new SpriteView(_rectangleCenterPositions[0] - (size / 2), _gridLayout._gap / 1.5f, borderColor, fillColor, borderSize);
+            SpriteView spriteView = new SpriteView(_rectangleCenterPositions[0] - (size / 2), _gridLayout._gap * 1.1f, borderColor, fillColor, borderSize);
             _triangle = new Triangle(spriteView, size, size);
             _triangle.Initialize();
+        }
+
+
+        internal void SetFillColor(Color fillColor)
+        {
+            _triangle.SetFillColor(fillColor);
         }
 
         // Moves the indicator to the closest columns center x position

@@ -41,8 +41,10 @@
             this.Name = "Main";
             this.Text = "Connect 4";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Main_MouseDown);
             this.MouseEnter += new System.EventHandler(this.Main_MouseEnter);
             this.MouseLeave += new System.EventHandler(this.Main_MouseLeave);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Main_MouseUp);
             this.ResumeLayout(false);
 
         }

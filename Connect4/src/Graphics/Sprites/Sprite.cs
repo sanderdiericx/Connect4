@@ -43,7 +43,10 @@ namespace Connect4.src.Graphics.Sprites
         {
             foreach (var pixel in pixels)
             {
-                pixel._pixelColor = fillColor;
+                if (pixel._pixelType == PixelType.Filling)
+                {
+                    pixel._pixelColor = fillColor;
+                }
             }
         }
 
@@ -51,7 +54,10 @@ namespace Connect4.src.Graphics.Sprites
         {
             foreach (var pixel in pixels)
             {
-                pixel._pixelColor = borderColor;
+                if (pixel._pixelType == PixelType.Border)
+                {
+                    pixel._pixelColor = borderColor;
+                }
             }
         }
 
