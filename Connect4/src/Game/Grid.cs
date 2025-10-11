@@ -14,13 +14,15 @@ namespace Connect4.src.Game
         internal GridLayout _gridLayout;
         internal GridCell[,] _gridCells;
         internal int[] _rectangleCenterPositions;
-        private (int col, int row) lastHighlight;
+        private (int col, int row) _lastHighlight;
+        internal (int col, int row) _lastMove;
 
         internal Grid(GridLayout gridLayout)
         {
             _gridLayout = gridLayout;
 
-            lastHighlight = (0, 0);
+            _lastHighlight = (0, 0);
+            _lastMove = (0, 0);
 
             GenerateGameGridRectangles();
             GenerateRectangleCenterPositions();
@@ -33,16 +35,16 @@ namespace Connect4.src.Game
             int row = FindFurthestCell(col);
 
             // Reset the last highlighted cell if the indicated cell changed
-            if (lastHighlight.col != col || lastHighlight.row != row)
+            if (_lastHighlight.col != col || _lastHighlight.row != row)
             {
-                _gridCells[lastHighlight.col, lastHighlight.row]._cellRectangle.SetBorderColor(_gridLayout._borderColor);
+                _gridCells[_lastHighlight.col, _lastHighlight.row]._cellRectangle.SetBorderColor(_gridLayout._borderColor);
             }
 
             if (row != -1)
             {
                 _gridCells[col, row]._cellRectangle.SetBorderColor(highlightColor);
 
-                lastHighlight = (col, row);
+                _lastHighlight = (col, row);
             }
         }
 
@@ -135,6 +137,9 @@ namespace Connect4.src.Game
 
                 // Asign the newly created marker to the correct spot in the grid
                 _gridCells[col, row]._cellMarker = marker;
+
+                // Save the last move
+                _lastMove = (col, row);
             }
         }
 

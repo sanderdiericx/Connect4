@@ -34,8 +34,6 @@ namespace Connect4.src.Graphics
             _isMouseInside = false;
             _isMouseDown = false;
 
-            _bytesPerPixel = 4; // Standard for argb value
-
             _lastElapsedTime = 0;
 
             return _instance;
@@ -55,7 +53,7 @@ namespace Connect4.src.Graphics
         internal static float _deltaTime;
         private static float _lastElapsedTime;
 
-        private static int _bytesPerPixel;
+        private const int BYTES_PER_PIXEL = 4;
 
         internal static void StartAnimation(Animation animation)
         {
@@ -118,7 +116,7 @@ namespace Connect4.src.Graphics
             unsafe
             {
                 byte* ptr = (byte*)bmpData.Scan0; // Grab start adress pointer
-                int index = (int)pixelData._pixelPosition.Y * bmpData.Stride + (int)pixelData._pixelPosition.X * _bytesPerPixel; // Compute pixel location in memory
+                int index = (int)pixelData._pixelPosition.Y * bmpData.Stride + (int)pixelData._pixelPosition.X * BYTES_PER_PIXEL; // Compute pixel location in memory
 
                 // Write pixel color data directly to computed adress
                 ptr[index] = pixelData._pixelColor.B;

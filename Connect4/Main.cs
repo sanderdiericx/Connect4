@@ -28,7 +28,7 @@ namespace Connect4
             frameTimer.Interval = 16; // 60FPS
 
             frameTimer.Tick += FrameTimer_Tick;
-            frameTimer.Start();
+            frameTimer.Start(); // Start game
 
             _elapsedTime = new Stopwatch();
             _elapsedTime.Start();
