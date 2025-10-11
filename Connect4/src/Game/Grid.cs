@@ -131,9 +131,9 @@ namespace Connect4.src.Game
                 Circle marker = new Circle(spriteView, cellRectangle._width / cellRectangle._height * (cellRectangle._height - cellRectangle._height / 6) / 2);
                 marker.Initialize();
 
-                // Create an animation to drop the marker onto the grid
-                TransformAnimation animation = new TransformAnimation(marker, animationSpeed, easingFunction, new Vector2(markerXPosition, (int)cellRectangle._yPosition + (cellRectangle._height / 2)));
-                GraphicsEngine.StartAnimation(animation);
+                // Create a transformAnimation to drop the marker onto the grid
+                TransformAnimation transformAnimation = new TransformAnimation(marker, animationSpeed, easingFunction, new Vector2(markerXPosition, (int)cellRectangle._yPosition + (cellRectangle._height / 2)));
+                GraphicsEngine.StartAnimation(transformAnimation);
 
                 // Asign the newly created marker to the correct spot in the grid
                 _gridCells[col, row]._cellMarker = marker;

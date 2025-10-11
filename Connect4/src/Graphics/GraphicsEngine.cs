@@ -55,7 +55,7 @@ namespace Connect4.src.Graphics
 
         private const int BYTES_PER_PIXEL = 4;
 
-        internal static void StartAnimation(TransformAnimation animation)
+        internal static void StartAnimation(Animation animation)
         {
             _animationBatch._animations.Add(animation);
         }

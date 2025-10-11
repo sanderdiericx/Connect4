@@ -19,7 +19,7 @@ namespace Connect4.src.Graphics
             _startPosition = new Vector2(sprite._xPosition, sprite._yPosition);
         }
 
-        // Use LERP to interpolate the sprite position to a target position
+        // Use linear interpolation to interpolate the sprite position to a target position
         internal override void AnimateSprite()
         {
             base.AnimateSprite();
