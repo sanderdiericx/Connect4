@@ -68,6 +68,7 @@
     <Compile Include="src\Game\Indicator.cs" />
     <Compile Include="src\Game\Winner.cs" />
     <Compile Include="src\Graphics\Animations\Animation.cs" />
+    <Compile Include="src\Graphics\Animations\AnimationChain.cs" />
     <Compile Include="src\Graphics\Animations\AnimationTarget.cs" />
     <Compile Include="src\Graphics\Animations\ColorAnimation.cs" />
     <Compile Include="src\Graphics\Animations\TransformAnimation.cs" />

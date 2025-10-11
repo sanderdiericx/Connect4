@@ -1,4 +1,5 @@
 ﻿using Connect4.src.Game;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using Connect = Connect4.src.Game.Connect4;

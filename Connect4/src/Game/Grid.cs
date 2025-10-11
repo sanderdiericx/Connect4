@@ -136,6 +136,16 @@ namespace Connect4.src.Game
                 TransformAnimation transformAnimation = new TransformAnimation(animationTarget, new Vector2(markerXPosition, (int)cellRectangle._yPosition + (cellRectangle._height / 2)));
                 GraphicsEngine.StartAnimation(transformAnimation);
 
+                // TEMPORARY TEST
+                AnimationTarget colorAnimationTarget = new AnimationTarget(marker, 0.3f, x => x);
+                List<Animation> animationChain = new List<Animation>();
+                animationChain.Add(new ColorAnimation(colorAnimationTarget, Color.Blue));
+                animationChain.Add(new ColorAnimation(colorAnimationTarget, Color.Black));
+                animationChain.Add(new ColorAnimation(colorAnimationTarget, Color.Green));
+                animationChain.Add(new ColorAnimation(colorAnimationTarget, Color.Purple));
+
+                GraphicsEngine.StartAnimationChain(animationChain);
+
                 // Asign the newly created marker to the correct spot in the grid
                 _gridCells[col, row]._cellMarker = marker;
 
