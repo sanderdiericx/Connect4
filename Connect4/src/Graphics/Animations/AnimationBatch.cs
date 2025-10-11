@@ -21,7 +21,7 @@ namespace Connect4.src.Graphics.Sprites
         {
             for (int i = 0; i < _animations.Count; i++)
             {
-                if (!_animations[i].animationDone)
+                if (!_animations[i]._animationDone)
                 {
                     _animations[i].AnimateSprite();
                 }

@@ -1,8 +1,6 @@
 ﻿using Connect4.src.Game;
-using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using Connect = Connect4.src.Game.Connect4;
 
 namespace Connect4.src.Graphics

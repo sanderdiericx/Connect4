@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Connect4.src.Game
+﻿namespace Connect4.src.Game
 {
     internal static class Connect4
     {
