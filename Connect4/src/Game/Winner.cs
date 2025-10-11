@@ -10,6 +10,7 @@ namespace Connect4.src.Game
     {
         Player,
         Computer,
+        Draw,
         None
     }
 }

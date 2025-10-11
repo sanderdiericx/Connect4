@@ -5,10 +5,6 @@ using System.Numerics;
 
 namespace Connect4.src.Graphics
 {
-    /// <summary>
-    /// The rasturizer class handles computing sprites boundary and filling pixels, typically these methods are only called once in a sprites lifetime (at Initialize),
-    /// but they can be called again to compute pixels with new parameters (ex: radius)
-    /// </summary>
     internal static class Rasturizer
     {
         internal static List<PixelData> ComputeCirclePixels(Circle circle)

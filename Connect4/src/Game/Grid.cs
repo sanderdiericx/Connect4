@@ -132,7 +132,7 @@ namespace Connect4.src.Game
                 marker.Initialize();
 
                 // Create an animation to drop the marker onto the grid
-                Animation animation = new Animation(marker, new Vector2(markerXPosition, (int)cellRectangle._yPosition + (cellRectangle._height / 2)), animationSpeed, easingFunction);
+                TransformAnimation animation = new TransformAnimation(marker, animationSpeed, easingFunction, new Vector2(markerXPosition, (int)cellRectangle._yPosition + (cellRectangle._height / 2)));
                 GraphicsEngine.StartAnimation(animation);
 
                 // Asign the newly created marker to the correct spot in the grid

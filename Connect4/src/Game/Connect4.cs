@@ -20,7 +20,34 @@ namespace Connect4.src.Game
                 winner = lastMoveCellType == CellType.Red ? Winner.Player : Winner.Computer;
             }
 
+            // If no players have won, check for a draw
+            if (gameState == GameState.Playing && CheckForDraw(grid))
+            {
+                gameState = GameState.GameOver;
+                winner = Winner.Draw;
+            }
+
             return (gameState, winner);
+        }
+
+        // Checks a grid for a draw
+        private static bool CheckForDraw(Grid grid)
+        {
+            bool draw = true;
+
+            // Loop through the grid and check for an empty cell
+            for (int i = 0; i < grid._gridLayout._columns; i++)
+            {
+                for (int j = 0; j < grid._gridLayout._rows; j++)
+                {
+                    if (grid._gridCells[i, j]._cellType == CellType.Empty)
+                    {
+                        draw = false;
+                    }
+                }
+            }
+
+            return draw;
         }
 
         // Returns the longest chain of cells of a given type at a position in the grid

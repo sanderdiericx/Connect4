@@ -15,7 +15,7 @@
         {
             base.Initialize();
 
-            pixels = Rasturizer.ComputeTrianglePixels(this);
+            _pixels = Rasturizer.ComputeTrianglePixels(this);
         }
     }
 }

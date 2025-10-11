@@ -8,7 +8,7 @@ namespace Connect4.src.Graphics.Sprites
 {
     internal abstract class Sprite
     {
-        protected List<PixelData> pixels;
+        internal protected List<PixelData> _pixels;
 
         private bool _isInitialized;
 
@@ -41,7 +41,7 @@ namespace Connect4.src.Graphics.Sprites
 
         internal void SetFillColor(Color fillColor)
         {
-            foreach (var pixel in pixels)
+            foreach (var pixel in _pixels)
             {
                 if (pixel._pixelType == PixelType.Filling)
                 {
@@ -52,7 +52,7 @@ namespace Connect4.src.Graphics.Sprites
 
         internal void SetBorderColor(Color borderColor)
         {
-            foreach (var pixel in pixels)
+            foreach (var pixel in _pixels)
             {
                 if (pixel._pixelType == PixelType.Border)
                 {
@@ -70,9 +70,9 @@ namespace Connect4.src.Graphics.Sprites
             _yPosition = position.Y;
 
             // Move pixels by the same delta
-            for (int i = 0; i < pixels.Count; i++)
+            for (int i = 0; i < _pixels.Count; i++)
             {
-                pixels[i]._pixelPosition += delta;
+                _pixels[i]._pixelPosition += delta;
             }
         }
 
@@ -83,9 +83,9 @@ namespace Connect4.src.Graphics.Sprites
             _yPosition += transform.Y;
 
             // Loop through all pixels and apply transformation
-            for (int i = 0; i < pixels.Count; i++)
+            for (int i = 0; i < _pixels.Count; i++)
             {
-                pixels[i]._pixelPosition += transform;
+                _pixels[i]._pixelPosition += transform;
             }
         }
 
@@ -109,9 +109,9 @@ namespace Connect4.src.Graphics.Sprites
             {
                 if (_isFilled)
                 {
-                    for (int i = 0; i < pixels.Count; i++)
+                    for (int i = 0; i < _pixels.Count; i++)
                     {
-                        PixelData pixel = pixels[i];
+                        PixelData pixel = _pixels[i];
 
                         if (pixel._pixelPosition.X >= 0 && pixel._pixelPosition.X < GraphicsEngine._windowWidth && pixel._pixelPosition.Y >= 0 && pixel._pixelPosition.Y < GraphicsEngine._windowHeight)
                         {
@@ -126,9 +126,9 @@ namespace Connect4.src.Graphics.Sprites
 
                 if (_hasBorder)
                 {
-                    for (int i = 0; i < pixels.Count; i++)
+                    for (int i = 0; i < _pixels.Count; i++)
                     {
-                        PixelData pixel = pixels[i];
+                        PixelData pixel = _pixels[i];
 
                         if (pixel._pixelPosition.X >= 0 && pixel._pixelPosition.X < GraphicsEngine._windowWidth && pixel._pixelPosition.Y >= 0 && pixel._pixelPosition.Y < GraphicsEngine._windowHeight)
                         {
