@@ -2,12 +2,16 @@
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Connect4
 {
     public partial class Main : Form
     {
         private Stopwatch _elapsedTime;
+
+        internal static Button _btnNewGame;
+        internal static Label _lblWinner;
 
         public Main()
         {
@@ -22,6 +26,16 @@ namespace Connect4
             GraphicsEngine.Start(Width, Height);
 
             GameLoop.LoadGame();
+
+            // Set up form controls
+            _btnNewGame = btnNewGame;
+            _lblWinner = lblWinner;
+
+            _btnNewGame.Location = new Point(Width - _btnNewGame.Width - 130,_btnNewGame.Location.Y);
+            _lblWinner.Location = new Point(130, _lblWinner.Location.Y);
+
+            _btnNewGame.Visible = false;
+            _lblWinner.Visible = false;
 
             // Set up frame timer
             Timer frameTimer = new Timer();

@@ -1,12 +1,106 @@
-﻿using System.Collections.Generic;
+﻿using Connect4.src.Graphics;
+using Connect4.src.Graphics.Animations;
+using Connect4.src.Graphics.Sprites;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Numerics;
 
 namespace Connect4.src.Game
 {
-    internal static class Connect4
+    internal static class Connect
     {
+        internal static void UpdateUI()
+        {
+            if (GraphicsEngine._isMouseInside)
+            {
+                GameLoop._indicator.UpdatePosition();
+            }
+
+            GameLoop._grid.HighlightSelectedCell(GameLoop._playerTurn ? Color.Firebrick : Color.Gold);
+            GameLoop._indicator.SetFillColor(GameLoop._playerTurn ? Color.Firebrick : Color.Gold);
+        }
+
+        internal static void UpdateConnect4()
+        {
+            if (GameLoop._playerTurn)
+            {
+                DropMarker(CellType.Red);
+            }
+            else // TEMPORARY MANUAL MARKER PLACING UNTIL COMPUTER LOGIC IS IMPLEMENTED
+            {
+                DropMarker(CellType.Yellow);
+            }
+        }
+
+        internal static void GameOver()
+        {
+            GameLoop._indicator._triangle._isVisible = false;
+
+            // Unhighlight selected cell
+            Vector2 lastHighlight = GameLoop._grid._lastHighlight;
+            GameLoop._grid._gridCells[(int)lastHighlight.X, (int)lastHighlight.Y]._cellRectangle.SetBorderColor(GameLoop._grid._gridLayout._borderColor);
+
+            if (GameLoop._gameCheckResult._winner != Winner.Draw)
+            {
+                // Create a rainbow animation for all winning markers
+                foreach (var winningPosition in GameLoop._gameCheckResult._winningMarkers)
+                {
+                    // Create a chainAnimation to endlessly change the markers colors
+                    Circle winningSprite = GameLoop._grid._gridCells[(int)winningPosition.X, (int)winningPosition.Y]._cellMarker;
+                    AnimationTarget animationTarget = new AnimationTarget(winningSprite, 1f, x => x);
+                    List<ColorAnimation> animations = DefaultChainAnimations.GetRainbowAnimation(animationTarget);
+
+                    GraphicsEngine.StartAnimationChain(animations, true);
+                }
+            }
+
+            // Show win label and reset button
+            string winnerText = "";
+            Winner winner = GameLoop._gameCheckResult._winner;
+
+            if (winner == Winner.Player)
+            {
+                winnerText = "Player has won!";
+            }
+            else if (winner == Winner.Computer)
+            {
+                winnerText = "Computer has won!";
+            }
+            else
+            {
+                winnerText = "Draw!";
+            }
+
+            Main._lblWinner.Text = winnerText;
+
+            Main._lblWinner.Visible = true;
+            Main._btnNewGame.Visible = true;
+        }
+
+
+        private static void DropMarker(CellType cellType)
+        {
+            int closestCol = GameLoop._grid.GetClosestIndex();
+            int furthestCell = GameLoop._grid.FindFurthestCell(closestCol);
+
+            // Drop a red marker
+            if (GraphicsEngine._isMouseDown && GameLoop._markerCooldownTracker.Elapsed.TotalSeconds > GameLoop.MARKER_COOLDOWN && furthestCell != -1)
+            {
+                GameLoop._grid.SetGridCell(closestCol, furthestCell, cellType, EasingFunctions.GetEaseOutBounce(), GameLoop.MARKER_DROP_SPEED);
+
+                GameLoop._playerTurn = GameLoop._playerTurn ? false : true;
+
+                // Check if any player won
+                GameLoop._gameCheckResult = CheckWinCondition(GameLoop._grid);
+
+                // Restart cooldown
+                GameLoop._markerCooldownTracker.Restart();
+            }
+        }
+
         // Scans the last move for 4 markers of the same type in a chain, if 4 are found it returns a new gamestate and the winner
-        internal static GameCheckResult CheckWinCondition(Grid grid)
+        private static GameCheckResult CheckWinCondition(Grid grid)
         {
             GameState gameState = GameState.Playing;
             Winner winner = Winner.None;
