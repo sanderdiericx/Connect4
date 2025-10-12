@@ -24,6 +24,11 @@ namespace Connect4.src.Graphics.Sprites
             _animations.Clear();
         }
 
+        internal void AddAnimationChain(AnimationChain animationChain)
+        {
+            _animationChains.Add((animationChain, 0)); // Always start at animation index 0
+        }
+
         // Checks every animation chain to see which need to move on to the next animation
         internal void UpdateAnimationChains()
         {
@@ -36,13 +41,27 @@ namespace Connect4.src.Graphics.Sprites
                 if (animationChain._animations.ElementAt(currentAnimationIndex)._animationDone)
                 {
                     // If the animation chain is finished, remove it from the saved animationChains
-                    if (currentAnimationIndex + 1 >= animationChain._animations.Count())
+                    if (currentAnimationIndex + 1 >= animationChain._animations.Count() && !animationChain._endlessAnimation)
                     {
                         _animationChains.RemoveAt(i);
+                    }
+                    else if (currentAnimationIndex + 1 >= animationChain._animations.Count() && animationChain._endlessAnimation) // if it is finished and is endless, restart it from the first index
+                    {
+                        currentAnimationIndex = 0;
+                        _animationChains[i] = (animationChain, currentAnimationIndex);
+
+                        // Reset all animations in the chain
+                        foreach (var animation in animationChain._animations)
+                        {
+                            animation.Reset();
+                        }
+
+                        _animations.Add(animationChain._animations.ElementAt(currentAnimationIndex));
                     }
                     else // If it is not finished, start the next animation
                     {
                         currentAnimationIndex++;
+                        _animationChains[i] = (animationChain, currentAnimationIndex);
 
                         _animations.Add(animationChain._animations.ElementAt(currentAnimationIndex));
                     }
@@ -52,15 +71,13 @@ namespace Connect4.src.Graphics.Sprites
 
         internal void Animate()
         {
-            for (int i = 0; i < _animations.Count; i++)
+            for (int i = _animations.Count - 1; i >= 0; i--)
             {
-                if (!_animations[i]._animationDone)
+                _animations[i].AnimateSprite();
+
+                if (_animations[i]._animationDone) // If the animation is done, remove the reference from the list
                 {
-                    _animations[i].AnimateSprite();
-                }
-                else // The animation is done, we can remove the reference to it from the list
-                {
-                    _animations.Remove(_animations[i]);
+                    _animations.RemoveAt(i);
                 }
             }
         }

@@ -41,6 +41,8 @@ namespace Connect4.src.Graphics.Sprites
 
         internal void SetFillColor(Color fillColor)
         {
+            _fillColor = fillColor;
+
             foreach (var pixel in _pixels)
             {
                 if (pixel._pixelType == PixelType.Filling)
@@ -52,6 +54,8 @@ namespace Connect4.src.Graphics.Sprites
 
         internal void SetBorderColor(Color borderColor)
         {
+            _borderColor = borderColor;
+
             foreach (var pixel in _pixels)
             {
                 if (pixel._pixelType == PixelType.Border)

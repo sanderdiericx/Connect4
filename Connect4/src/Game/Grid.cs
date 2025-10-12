@@ -137,14 +137,14 @@ namespace Connect4.src.Game
                 GraphicsEngine.StartAnimation(transformAnimation);
 
                 // TEMPORARY TEST
-                AnimationTarget colorAnimationTarget = new AnimationTarget(marker, 0.3f, x => x);
-                List<Animation> animationChain = new List<Animation>();
-                animationChain.Add(new ColorAnimation(colorAnimationTarget, Color.Blue));
-                animationChain.Add(new ColorAnimation(colorAnimationTarget, Color.Black));
-                animationChain.Add(new ColorAnimation(colorAnimationTarget, Color.Green));
-                animationChain.Add(new ColorAnimation(colorAnimationTarget, Color.Purple));
+                AnimationTarget colorAnimationTarget = new AnimationTarget(marker, 1f, x => x);
+                List<Animation> animations = new List<Animation>();
+                animations.Add(new ColorAnimation(colorAnimationTarget, Color.Blue));
+                animations.Add(new ColorAnimation(colorAnimationTarget, Color.White));
+                animations.Add(new ColorAnimation(colorAnimationTarget, Color.Green));
+                animations.Add(new ColorAnimation(colorAnimationTarget, Color.Black));
 
-                GraphicsEngine.StartAnimationChain(animationChain);
+                GraphicsEngine.StartAnimationChain(animations, false);
 
                 // Asign the newly created marker to the correct spot in the grid
                 _gridCells[col, row]._cellMarker = marker;

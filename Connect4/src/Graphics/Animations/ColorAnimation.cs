@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Connect4.src.Logs;
+using System;
 using System.Drawing;
 using System.Numerics;
 
@@ -9,18 +10,27 @@ namespace Connect4.src.Graphics
     {
         private Vector4 _startColor;
         private Vector4 _endColor;
+        private bool _startedAnimation;
 
         internal ColorAnimation(AnimationTarget animationTarget, Color endColor) : base(animationTarget)
         {
             // Normalize to 0-1 for interpolation
             _endColor = new Vector4(endColor.A / 255f, endColor.R / 255f, endColor.G / 255f, endColor.B / 255f);
-            _startColor = new Vector4(_animationTarget._sprite._fillColor.A / 255f, _animationTarget._sprite._fillColor.R / 255f, _animationTarget._sprite._fillColor.G / 255f, _animationTarget._sprite._fillColor.B / 255f);
+
+            _startedAnimation = false;
         }
 
         // Use linear interpolation to interpolate the sprite color to a target color
         internal override void AnimateSprite()
         {
             base.AnimateSprite();
+
+            // Build start color at the time the sprite gets animated
+            if (!_startedAnimation)
+            {
+                _startColor = new Vector4(_animationTarget._sprite._fillColor.A / 255f, _animationTarget._sprite._fillColor.R / 255f, _animationTarget._sprite._fillColor.G / 255f, _animationTarget._sprite._fillColor.B / 255f);
+                _startedAnimation = true;
+            }
 
             _t += Math.Min(_animationTarget._speed * GraphicsEngine._deltaTime, 1f);
 
@@ -41,6 +51,7 @@ namespace Connect4.src.Graphics
                 Color endColor = Color.FromArgb((int)(_endColor.X * 255), (int)(_endColor.Y * 255), (int)(_endColor.Z * 255), (int)(_endColor.W * 255));
 
                 _animationTarget._sprite.SetFillColor(endColor);
+
                 _animationDone = true;
             }
         }

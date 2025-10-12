@@ -3,7 +3,7 @@ using System;
 
 namespace Connect4.src.Graphics
 {
-    internal struct AnimationTarget
+    internal class AnimationTarget
     {
         internal Sprite _sprite;
         internal float _speed;

@@ -18,5 +18,12 @@
         {
 
         }
+
+        // Resets an animation
+        internal virtual void Reset()
+        {
+            _t = 0;
+            _animationDone = false;
+        }
     }
 }

@@ -2,6 +2,7 @@
 using Connect4.src.Logs;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -57,14 +58,14 @@ namespace Connect4.src.Graphics
         private const int BYTES_PER_PIXEL = 4;
 
         // Starts an animation chain by adding it to the animation batch
-        internal static void StartAnimationChain(IEnumerable<Animation> animations)
+        internal static void StartAnimationChain(IEnumerable<Animation> animations, bool endlessAnimation)
         {
-            var chain = new Animations.AnimationChain(animations);
+            var chain = new Animations.AnimationChain(animations, endlessAnimation);
 
             // Start the first animation
             _animationBatch._animations.Add(chain._animations.ElementAt(0));
 
-            _animationBatch._animationChains.Add((chain, 0)); // Start at animation index 0
+            _animationBatch.AddAnimationChain(chain);
         }
 
         internal static void StartAnimation(Animation animation)
