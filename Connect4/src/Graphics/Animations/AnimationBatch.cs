@@ -1,16 +1,12 @@
 ﻿using Connect4.src.Graphics.Animations;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace Connect4.src.Graphics.Sprites
 {
-    // Animationbatch holds all animations that need to be animated over the course of many frames
     internal class AnimationBatch
     {
         internal readonly List<Animation> _animations;
-
-        // A dictionary containing an animation chain, along with the index of the current animation that is running
         internal List<(AnimationChain, int)> _animationChains;
 
         internal AnimationBatch()
@@ -21,7 +17,8 @@ namespace Connect4.src.Graphics.Sprites
 
         internal void AddAnimationChain(AnimationChain animationChain)
         {
-            _animationChains.Add((animationChain, 0)); // Always start at animation index 0
+            // Chains should always start at animationIndex 0
+            _animationChains.Add((animationChain, 0));
         }
 
         // Checks every animation chain to see which need to move on to the next animation
@@ -51,9 +48,10 @@ namespace Connect4.src.Graphics.Sprites
                             animation.Reset();
                         }
 
+                        // Start the first animation in the chain
                         _animations.Add(animationChain._animations.ElementAt(currentAnimationIndex));
                     }
-                    else // If it is not finished, start the next animation
+                    else // If the animation chain is not finished, start the next animation
                     {
                         currentAnimationIndex++;
                         _animationChains[i] = (animationChain, currentAnimationIndex);

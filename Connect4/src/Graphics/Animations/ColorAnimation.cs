@@ -1,5 +1,4 @@
-﻿using Connect4.src.Logs;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Numerics;
 

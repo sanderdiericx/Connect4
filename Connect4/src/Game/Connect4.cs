@@ -1,6 +1,5 @@
-﻿using System.Numerics;
-using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
+﻿using System.Collections.Generic;
+using System.Numerics;
 
 namespace Connect4.src.Game
 {
@@ -14,7 +13,7 @@ namespace Connect4.src.Game
             List<Vector2> winningMarkers = new List<Vector2>();
 
             Vector2 lastMove = grid._lastMove;
-            CellType lastMoveCellType = grid._gridCells[(int) lastMove.X, (int) lastMove.Y]._cellType;
+            CellType lastMoveCellType = grid._gridCells[(int)lastMove.X, (int)lastMove.Y]._cellType;
 
             var LongestChainResult = GetLongestChainAtPosition(grid, lastMoveCellType, (int)lastMove.X, (int)lastMove.Y);
             winningMarkers = LongestChainResult.markerPositions;
@@ -71,7 +70,7 @@ namespace Connect4.src.Game
 
             int longestCount = 0;
 
-            List<Vector2> longestMarkerPositions = new List<Vector2>(); 
+            List<Vector2> longestMarkerPositions = new List<Vector2>();
 
             foreach ((int dx, int dy) direction in directions)
             {

@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using Connect4.src.Graphics.Sprites;
-using System;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 
 namespace Connect4.src.Graphics.Animations
 {
@@ -10,7 +7,7 @@ namespace Connect4.src.Graphics.Animations
     {
         internal static List<ColorAnimation> GetRainbowAnimation(AnimationTarget animationTarget)
         {
-            List <ColorAnimation> animations = new List<ColorAnimation>();
+            List<ColorAnimation> animations = new List<ColorAnimation>();
 
             List<Color> rainbowColors = new List<Color>()
             {

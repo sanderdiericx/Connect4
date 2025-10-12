@@ -37,7 +37,7 @@ namespace Connect4.src.Game
             // Reset the last highlighted cell if the indicated cell changed
             if (_lastHighlight.X != col || _lastHighlight.Y != row)
             {
-                _gridCells[(int) _lastHighlight.X, (int) _lastHighlight.Y]._cellRectangle.SetBorderColor(_gridLayout._borderColor);
+                _gridCells[(int)_lastHighlight.X, (int)_lastHighlight.Y]._cellRectangle.SetBorderColor(_gridLayout._borderColor);
             }
 
             if (row != -1)

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
-using System.Windows.Forms;
 using Connect = Connect4.src.Game.Connect4;
 
 namespace Connect4.src.Graphics
@@ -85,7 +84,7 @@ namespace Connect4.src.Graphics
 
             // Unhighlight selected cell
             Vector2 lastHighlight = _grid._lastHighlight;
-            _grid._gridCells[(int) lastHighlight.X, (int) lastHighlight.Y]._cellRectangle.SetBorderColor(_grid._gridLayout._borderColor);
+            _grid._gridCells[(int)lastHighlight.X, (int)lastHighlight.Y]._cellRectangle.SetBorderColor(_grid._gridLayout._borderColor);
 
             if (_gameCheckResult._winner != Winner.Draw)
             {
