@@ -68,6 +68,11 @@ namespace Connect4.src.Graphics
             _animationBatch.AddAnimationChain(chain);
         }
 
+        internal static void StopAllChainAnimations()
+        {
+            _animationBatch._animationChains.Clear();
+        }
+
         internal static void StartAnimation(Animation animation)
         {
             _animationBatch._animations.Add(animation);

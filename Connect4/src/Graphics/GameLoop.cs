@@ -1,7 +1,11 @@
 ﻿using Connect4.src.Game;
+using Connect4.src.Graphics.Animations;
+using Connect4.src.Graphics.Sprites;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Numerics;
+using System.Windows.Forms;
 using Connect = Connect4.src.Game.Connect4;
 
 namespace Connect4.src.Graphics
@@ -24,8 +28,8 @@ namespace Connect4.src.Graphics
         private const int GRID_OFFSET = 10;
         private const int GRID_BORDERSIZE = 6;
 
-        private static GameState _gameState;
-        private static Winner _winner;
+        private static GameCheckResult _gameCheckResult;
+        private static bool _gameOverHappened;
 
         internal static void LoadGame()
         {
@@ -35,9 +39,10 @@ namespace Connect4.src.Graphics
 
             _indicator = new Indicator(_grid, gridLayout, 50, Color.Black, Color.Firebrick, 12);
 
-            _gameState = GameState.Playing;
-            _winner = Winner.None;
+            _gameCheckResult = new GameCheckResult(GameState.Playing, Winner.None, new List<Vector2>());
             _playerTurn = true;
+
+            _gameOverHappened = false;
 
             _markerCooldownTracker = new Stopwatch();
             _markerCooldownTracker.Start();
@@ -45,8 +50,16 @@ namespace Connect4.src.Graphics
 
         internal static void UpdateGame()
         {
-            // Render updates
-            if (_gameState == GameState.Playing)
+            GameState gameState = _gameCheckResult._gameState;
+
+            if (gameState == GameState.GameOver && !_gameOverHappened)
+            {
+                GameOver();
+
+                _gameOverHappened = true;
+            }
+
+            if (gameState == GameState.Playing)
             {
                 UpdateConnect4();
                 UpdateUI();
@@ -60,13 +73,33 @@ namespace Connect4.src.Graphics
             GraphicsEngine.ClearFrame();
             GraphicsEngine.ClearRenderBatch();
 
-            if (_gameState == GameState.Playing) // TEMPORARY
-            {
-                GraphicsEngine.AddSpritesToQueue(_grid.GetSprites());
-                GraphicsEngine.AddSpriteToQueue(_indicator._triangle);
-            }
+            GraphicsEngine.AddSpritesToQueue(_grid.GetSprites());
+            GraphicsEngine.AddSpriteToQueue(_indicator._triangle);
 
             GraphicsEngine.DrawRenderBatch();
+        }
+
+        private static void GameOver()
+        {
+            _indicator._triangle._isVisible = false;
+
+            // Unhighlight selected cell
+            Vector2 lastHighlight = _grid._lastHighlight;
+            _grid._gridCells[(int) lastHighlight.X, (int) lastHighlight.Y]._cellRectangle.SetBorderColor(_grid._gridLayout._borderColor);
+
+            if (_gameCheckResult._winner != Winner.Draw)
+            {
+                // Create a rainbow animation for all winning markers
+                foreach (var winningPosition in _gameCheckResult._winningMarkers)
+                {
+                    // Create a chainAnimation to endlessly change the markers colors
+                    Circle winningSprite = _grid._gridCells[(int)winningPosition.X, (int)winningPosition.Y]._cellMarker;
+                    AnimationTarget animationTarget = new AnimationTarget(winningSprite, 1f, x => x);
+                    List<ColorAnimation> animations = DefaultChainAnimations.GetRainbowAnimation(animationTarget);
+
+                    GraphicsEngine.StartAnimationChain(animations, true);
+                }
+            }
         }
 
         private static void UpdateUI()
@@ -82,46 +115,33 @@ namespace Connect4.src.Graphics
 
         private static void UpdateConnect4()
         {
+            if (_playerTurn)
+            {
+                DropMarker(CellType.Red);
+            }
+            else // TEMPORARY MANUAL MARKER PLACING UNTIL COMPUTER LOGIC IS IMPLEMENTED
+            {
+                DropMarker(CellType.Yellow);
+            }
+        }
+
+        private static void DropMarker(CellType cellType)
+        {
             int closestCol = _grid.GetClosestIndex();
             int furthestCell = _grid.FindFurthestCell(closestCol);
 
-            if (_playerTurn)
+            // Drop a red marker
+            if (GraphicsEngine._isMouseDown && _markerCooldownTracker.Elapsed.TotalSeconds > MARKER_COOLDOWN && furthestCell != -1)
             {
-                // Drop a red marker
-                if (GraphicsEngine._isMouseDown && _markerCooldownTracker.Elapsed.TotalSeconds > MARKER_COOLDOWN && furthestCell != -1)
-                {
-                    _grid.SetGridCell(closestCol, furthestCell, CellType.Red, EasingFunctions.GetEaseOutBounce(), MARKER_DROP_SPEED);
+                _grid.SetGridCell(closestCol, furthestCell, cellType, EasingFunctions.GetEaseOutBounce(), MARKER_DROP_SPEED);
 
-                    _playerTurn = false;
+                _playerTurn = _playerTurn ? false : true;
 
-                    // Check if any player won
-                    (GameState gameState, Winner winner) gameOutput = Connect.CheckWinCondition(_grid);
+                // Check if any player won
+                _gameCheckResult = Connect.CheckWinCondition(_grid);
 
-                    _gameState = gameOutput.gameState;
-                    _winner = gameOutput.winner;
-
-                    // Restart cooldown
-                    _markerCooldownTracker.Restart();
-                }
-            }
-            else // TEMPORARY MANUAL MARKER PLACING UNTIL COMPUTER IS IMPLEMENTED
-            {
-                // Drop a yellow marker
-                if (GraphicsEngine._isMouseDown && _markerCooldownTracker.Elapsed.TotalSeconds > MARKER_COOLDOWN && furthestCell != -1)
-                {
-                    _grid.SetGridCell(closestCol, furthestCell, CellType.Yellow, EasingFunctions.GetEaseOutBounce(), MARKER_DROP_SPEED);
-
-                    _playerTurn = true;
-
-                    // Check if anyone won
-                    (GameState gameState, Winner winner) gameOutput = Connect.CheckWinCondition(_grid);
-
-                    _gameState = gameOutput.gameState;
-                    _winner = gameOutput.winner;
-
-                    // Restart cooldown
-                    _markerCooldownTracker.Restart();
-                }
+                // Restart cooldown
+                _markerCooldownTracker.Restart();
             }
         }
     }

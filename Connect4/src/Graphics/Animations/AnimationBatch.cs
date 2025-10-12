@@ -19,11 +19,6 @@ namespace Connect4.src.Graphics.Sprites
             _animationChains = new List<(AnimationChain, int)>();
         }
 
-        internal void ClearAnimations()
-        {
-            _animations.Clear();
-        }
-
         internal void AddAnimationChain(AnimationChain animationChain)
         {
             _animationChains.Add((animationChain, 0)); // Always start at animation index 0

@@ -14,15 +14,15 @@ namespace Connect4.src.Game
         internal GridLayout _gridLayout;
         internal GridCell[,] _gridCells;
         internal int[] _rectangleCenterPositions;
-        private (int col, int row) _lastHighlight;
-        internal (int col, int row) _lastMove;
+        internal Vector2 _lastHighlight;
+        internal Vector2 _lastMove;
 
         internal Grid(GridLayout gridLayout)
         {
             _gridLayout = gridLayout;
 
-            _lastHighlight = (0, 0);
-            _lastMove = (0, 0);
+            _lastHighlight = Vector2.Zero;
+            _lastMove = Vector2.Zero;
 
             GenerateGameGridRectangles();
             GenerateRectangleCenterPositions();
@@ -35,16 +35,16 @@ namespace Connect4.src.Game
             int row = FindFurthestCell(col);
 
             // Reset the last highlighted cell if the indicated cell changed
-            if (_lastHighlight.col != col || _lastHighlight.row != row)
+            if (_lastHighlight.X != col || _lastHighlight.Y != row)
             {
-                _gridCells[_lastHighlight.col, _lastHighlight.row]._cellRectangle.SetBorderColor(_gridLayout._borderColor);
+                _gridCells[(int) _lastHighlight.X, (int) _lastHighlight.Y]._cellRectangle.SetBorderColor(_gridLayout._borderColor);
             }
 
             if (row != -1)
             {
                 _gridCells[col, row]._cellRectangle.SetBorderColor(highlightColor);
 
-                _lastHighlight = (col, row);
+                _lastHighlight = new Vector2(col, row);
             }
         }
 
@@ -136,21 +136,11 @@ namespace Connect4.src.Game
                 TransformAnimation transformAnimation = new TransformAnimation(animationTarget, new Vector2(markerXPosition, (int)cellRectangle._yPosition + (cellRectangle._height / 2)));
                 GraphicsEngine.StartAnimation(transformAnimation);
 
-                // TEMPORARY TEST
-                AnimationTarget colorAnimationTarget = new AnimationTarget(marker, 1f, x => x);
-                List<Animation> animations = new List<Animation>();
-                animations.Add(new ColorAnimation(colorAnimationTarget, Color.Blue));
-                animations.Add(new ColorAnimation(colorAnimationTarget, Color.White));
-                animations.Add(new ColorAnimation(colorAnimationTarget, Color.Green));
-                animations.Add(new ColorAnimation(colorAnimationTarget, Color.Black));
-
-                GraphicsEngine.StartAnimationChain(animations, false);
-
                 // Asign the newly created marker to the correct spot in the grid
                 _gridCells[col, row]._cellMarker = marker;
 
                 // Save the last move
-                _lastMove = (col, row);
+                _lastMove = new Vector2(col, row);
             }
         }
 
