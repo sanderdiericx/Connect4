@@ -144,6 +144,21 @@ namespace Connect4.src.Game
             }
         }
 
+        internal CellType[,] ConvertToCellTypeArray()
+        {
+            CellType[,] cellTypeArray = new CellType[_gridLayout._columns, _gridLayout._rows];
+
+            for (int i = 0; i < _gridLayout._columns; i++)
+            {
+                for (int j = 0; j < _gridLayout._rows; j++)
+                {
+                    cellTypeArray[i, j] = _gridCells[i, j]._cellType;
+                }
+            }
+
+            return cellTypeArray;
+        }
+
         // Fills an array with each x position for each column in the grid
         private void GenerateRectangleCenterPositions()
         {

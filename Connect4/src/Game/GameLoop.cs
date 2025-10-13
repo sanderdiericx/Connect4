@@ -1,10 +1,9 @@
-﻿using Connect4.src.Game;
+﻿using Connect4.src.Graphics;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
-using Connect = Connect4.src.Game.Connect;
 
-namespace Connect4.src.Graphics
+namespace Connect4.src.Game
 {
     internal class GameLoop
     {
