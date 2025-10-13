@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Connect4.src.Graphics
 {
@@ -35,6 +36,8 @@ namespace Connect4.src.Graphics
             _isMouseInside = false;
             _isMouseDown = false;
 
+            _btnNewGameClicked = false;
+
             _lastElapsedTime = 0;
 
             return _instance;
@@ -51,10 +54,16 @@ namespace Connect4.src.Graphics
         internal static bool _isMouseInside;
         internal static bool _isMouseDown;
 
+        internal static bool _btnNewGameClicked;
+
         internal static float _deltaTime;
         private static float _lastElapsedTime;
 
         private const int BYTES_PER_PIXEL = 4;
+
+        /*
+         * ANIMATIONS
+         */
 
         // Starts an animation chain by adding it to the animation batch
         internal static void StartAnimationChain(IEnumerable<Animation> animations, bool endlessAnimation)
@@ -67,10 +76,16 @@ namespace Connect4.src.Graphics
             _animationBatch.AddAnimationChain(chain);
         }
 
-        internal static void StopAllChainAnimations()
+        internal static void StopAllAnimationChains()
         {
             _animationBatch._animationChains.Clear();
         }
+
+        internal static void StopAllAnimations()
+        {
+            _animationBatch._animations.Clear();
+        }
+
 
         internal static void StartAnimation(Animation animation)
         {
@@ -83,6 +98,10 @@ namespace Connect4.src.Graphics
             _animationBatch.Animate();
         }
 
+
+        /*
+         * RENDERING
+         */
         internal static void DrawRenderBatch()
         {
             _renderBatch.Draw();
@@ -106,12 +125,6 @@ namespace Connect4.src.Graphics
             }
         }
 
-        internal static void SetDeltaTime(float elapsedTime)
-        {
-            _deltaTime = elapsedTime - _lastElapsedTime;
-            _lastElapsedTime = elapsedTime;
-        }
-
         // Clears the current frame bitmap
         internal static void ClearFrame()
         {
@@ -123,12 +136,12 @@ namespace Connect4.src.Graphics
 
             // Copy the buffer directly to memory at the location of our frame bitmap
             IntPtr startPointer = bmpData.Scan0; // Grab a pointer to the start adress in memory
-            System.Runtime.InteropServices.Marshal.Copy(buffer, 0, startPointer, bytes);
+            Marshal.Copy(buffer, 0, startPointer, bytes);
 
             _frame.UnlockBits(bmpData);
         }
 
-        // Writes pixel data to the a (bit locked!!!) bitmap memory address
+        // Writes pixel data to the (bit locked!!!) bitmap memory address
         internal static void SetPixelInBitmap(BitmapData bmpData, PixelData pixelData)
         {
             unsafe
@@ -142,6 +155,16 @@ namespace Connect4.src.Graphics
                 ptr[index + 2] = pixelData._pixelColor.R;
                 ptr[index + 3] = pixelData._pixelColor.A;
             }
+        }
+
+        /*
+         * OTHER
+         */
+
+        internal static void SetDeltaTime(float elapsedTime)
+        {
+            _deltaTime = elapsedTime - _lastElapsedTime;
+            _lastElapsedTime = elapsedTime;
         }
     }
 }

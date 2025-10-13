@@ -28,40 +28,31 @@ namespace Connect4.src.Graphics.Sprites
             {
                 AnimationChain animationChain = _animationChains[i].Item1;
                 int currentAnimationIndex = _animationChains[i].Item2;
+                Animation currentAnimation = animationChain._animations.ElementAt(currentAnimationIndex);
 
                 // Check if the current animation is done
-                if (animationChain._animations.ElementAt(currentAnimationIndex)._animationDone)
+                if (currentAnimation._animationDone)
                 {
+                    bool animationChainIsFinished = currentAnimationIndex + 1 >= animationChain._animations.Count();
+
                     // If the animation chain is finished, remove it from the saved animationChains
-                    if (currentAnimationIndex + 1 >= animationChain._animations.Count() && !animationChain._endlessAnimation)
+                    if (animationChainIsFinished && !animationChain._endlessAnimation)
                     {
                         _animationChains.RemoveAt(i);
                     }
-                    else if (currentAnimationIndex + 1 >= animationChain._animations.Count() && animationChain._endlessAnimation) // if it is finished and is endless, restart it from the first index
+                    else if (animationChainIsFinished && animationChain._endlessAnimation) // if it is finished and is endless, restart it from the first index
                     {
-                        currentAnimationIndex = 0;
-                        _animationChains[i] = (animationChain, currentAnimationIndex);
-
-                        // Reset all animations in the chain
-                        foreach (var animation in animationChain._animations)
-                        {
-                            animation.Reset();
-                        }
-
-                        // Start the first animation in the chain
-                        _animations.Add(animationChain._animations.ElementAt(currentAnimationIndex));
+                        ResetAnimationChain(animationChain, currentAnimationIndex, i);
                     }
                     else // If the animation chain is not finished, start the next animation
                     {
-                        currentAnimationIndex++;
-                        _animationChains[i] = (animationChain, currentAnimationIndex);
-
-                        _animations.Add(animationChain._animations.ElementAt(currentAnimationIndex));
+                        NextAnimation(animationChain, currentAnimationIndex, i);
                     }
                 }
             }
         }
 
+        // Animates all normal animations
         internal void Animate()
         {
             for (int i = _animations.Count - 1; i >= 0; i--)
@@ -73,6 +64,29 @@ namespace Connect4.src.Graphics.Sprites
                     _animations.RemoveAt(i);
                 }
             }
+        }
+
+        private void NextAnimation(AnimationChain animationChain, int currentAnimationIndex, int animationChainIndex)
+        {
+            currentAnimationIndex++;
+            _animationChains[animationChainIndex] = (animationChain, currentAnimationIndex);
+
+            _animations.Add(animationChain._animations.ElementAt(currentAnimationIndex));
+        }
+
+        private void ResetAnimationChain(AnimationChain animationChain, int currentAnimationIndex, int animationChainIndex)
+        {
+            currentAnimationIndex = 0;
+            _animationChains[animationChainIndex] = (animationChain, currentAnimationIndex);
+
+            // Reset all animations in the chain
+            foreach (var animation in animationChain._animations)
+            {
+                animation.Reset();
+            }
+
+            // Start the first animation in the chain
+            _animations.Add(animationChain._animations.ElementAt(currentAnimationIndex));
         }
     }
 }

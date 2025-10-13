@@ -1,63 +1,121 @@
 ﻿using Connect4.src.Graphics;
 using Connect4.src.Graphics.Animations;
 using Connect4.src.Graphics.Sprites;
-using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
 
 namespace Connect4.src.Game
 {
-    internal static class Connect
+    internal class Connect
     {
-        internal static void UpdateUI()
-        {
-            if (GraphicsEngine._isMouseInside)
-            {
-                GameLoop._indicator.UpdatePosition();
-            }
+        private const float MARKER_COOLDOWN = 0.15f;
+        private const float MARKER_DROP_SPEED = 0.5f;
 
-            GameLoop._grid.HighlightSelectedCell(GameLoop._playerTurn ? Color.Firebrick : Color.Gold);
-            GameLoop._indicator.SetFillColor(GameLoop._playerTurn ? Color.Firebrick : Color.Gold);
+        internal Grid _grid;
+        internal Indicator _indicator;
+        internal bool _playerTurn;
+
+        private Stopwatch _markerCooldownTracker;
+
+        internal Connect(GridLayout gridLayout)
+        {
+            _grid = new Grid(gridLayout);
+            _indicator = new Indicator(_grid, gridLayout, 50, Color.Black, Color.Firebrick, 12);
+            _playerTurn = true;
+
+            _markerCooldownTracker = new Stopwatch();
+            _markerCooldownTracker.Start();
         }
 
-        internal static void UpdateConnect4()
+        internal void NextTurn()
         {
-            if (GameLoop._playerTurn)
-            {
-                DropMarker(CellType.Red);
-            }
-            else // TEMPORARY MANUAL MARKER PLACING UNTIL COMPUTER LOGIC IS IMPLEMENTED
-            {
-                DropMarker(CellType.Yellow);
-            }
+            _playerTurn = !_playerTurn;
         }
 
-        internal static void GameOver()
+        // Drops a marker of a certain cellType if mouse is clicked. returns true if a marker was dropped
+        internal bool TryDropMarker(CellType cellType)
         {
-            GameLoop._indicator._triangle._isVisible = false;
+            bool markerDropped = false;
+
+            int closestCol = _grid.GetClosestIndex();
+            int furthestCell = _grid.FindFurthestCell(closestCol);
+
+            if (GraphicsEngine._isMouseDown && _markerCooldownTracker.Elapsed.TotalSeconds > MARKER_COOLDOWN && furthestCell != -1)
+            {
+                // Drops a marker with an animation
+                _grid.SetGridCell(closestCol, furthestCell, cellType, EasingFunctions.GetEaseOutBounce(), MARKER_DROP_SPEED);
+
+                markerDropped = true;
+
+                // Restart cooldown
+                _markerCooldownTracker.Restart();
+            }
+
+            return markerDropped;
+        }
+
+        internal void GameOver(GameCheckResult gameCheckResult)
+        {
+            _indicator._triangle._isVisible = false;
 
             // Unhighlight selected cell
-            Vector2 lastHighlight = GameLoop._grid._lastHighlight;
-            GameLoop._grid._gridCells[(int)lastHighlight.X, (int)lastHighlight.Y]._cellRectangle.SetBorderColor(GameLoop._grid._gridLayout._borderColor);
+            Vector2 lastHighlight = _grid._lastHighlight;
+            _grid._gridCells[(int)lastHighlight.X, (int)lastHighlight.Y]._cellRectangle.SetBorderColor(_grid._gridLayout._borderColor);
 
-            if (GameLoop._gameCheckResult._winner != Winner.Draw)
+            if (gameCheckResult._winner != Winner.Draw)
             {
                 // Create a rainbow animation for all winning markers
-                foreach (var winningPosition in GameLoop._gameCheckResult._winningMarkers)
+                foreach (var winningPosition in gameCheckResult._winningMarkers)
                 {
                     // Create a chainAnimation to endlessly change the markers colors
-                    Circle winningSprite = GameLoop._grid._gridCells[(int)winningPosition.X, (int)winningPosition.Y]._cellMarker;
+                    Circle winningSprite = _grid._gridCells[(int)winningPosition.X, (int)winningPosition.Y]._cellMarker;
                     AnimationTarget animationTarget = new AnimationTarget(winningSprite, 1f, x => x);
                     List<ColorAnimation> animations = DefaultChainAnimations.GetRainbowAnimation(animationTarget);
 
                     GraphicsEngine.StartAnimationChain(animations, true);
                 }
             }
+        }
 
-            // Show win label and reset button
+        // Scans the last move for 4 markers of the same type in a chain, if 4 are found it returns a new gamestate and the winner
+        internal GameCheckResult CheckWinCondition()
+        {
+            GameState gameState = GameState.Playing;
+            Winner winner = Winner.None;
+            List<Vector2> winningMarkers = new List<Vector2>();
+
+            Vector2 lastMove = _grid._lastMove;
+            CellType lastMoveCellType = _grid._gridCells[(int)lastMove.X, (int)lastMove.Y]._cellType;
+
+            var LongestChainResult = GetLongestChainAtPosition(_grid, lastMoveCellType, (int)lastMove.X, (int)lastMove.Y);
+            winningMarkers = LongestChainResult.markerPositions;
+
+            // Check for 4 chained cells at the last move
+            if (LongestChainResult.count >= 4)
+            {
+                gameState = GameState.GameOver;
+                winner = lastMoveCellType == CellType.Red ? Winner.Player : Winner.Computer;
+            }
+
+            // If no players have won, check for a draw
+            if (gameState == GameState.Playing && CheckForDraw(_grid))
+            {
+                gameState = GameState.GameOver;
+                winner = Winner.Draw;
+            }
+
+            GameCheckResult gameCheckResult = new GameCheckResult(gameState, winner, winningMarkers);
+
+            return gameCheckResult;
+        }
+
+        // Show win label and reset button
+        internal void ShowWinUI(GameCheckResult gameCheckResult)
+        {
             string winnerText = "";
-            Winner winner = GameLoop._gameCheckResult._winner;
+            Winner winner = gameCheckResult._winner;
 
             if (winner == Winner.Player)
             {
@@ -78,61 +136,27 @@ namespace Connect4.src.Game
             Main._btnNewGame.Visible = true;
         }
 
-
-        private static void DropMarker(CellType cellType)
+        // Hide win label and reset button
+        internal void HideWinUI()
         {
-            int closestCol = GameLoop._grid.GetClosestIndex();
-            int furthestCell = GameLoop._grid.FindFurthestCell(closestCol);
-
-            // Drop a red marker
-            if (GraphicsEngine._isMouseDown && GameLoop._markerCooldownTracker.Elapsed.TotalSeconds > GameLoop.MARKER_COOLDOWN && furthestCell != -1)
-            {
-                GameLoop._grid.SetGridCell(closestCol, furthestCell, cellType, EasingFunctions.GetEaseOutBounce(), GameLoop.MARKER_DROP_SPEED);
-
-                GameLoop._playerTurn = GameLoop._playerTurn ? false : true;
-
-                // Check if any player won
-                GameLoop._gameCheckResult = CheckWinCondition(GameLoop._grid);
-
-                // Restart cooldown
-                GameLoop._markerCooldownTracker.Restart();
-            }
+            Main._lblWinner.Visible = false;
+            Main._btnNewGame.Visible = false;
         }
 
-        // Scans the last move for 4 markers of the same type in a chain, if 4 are found it returns a new gamestate and the winner
-        private static GameCheckResult CheckWinCondition(Grid grid)
+        // Updates game UI elements
+        internal void UpdateUI()
         {
-            GameState gameState = GameState.Playing;
-            Winner winner = Winner.None;
-            List<Vector2> winningMarkers = new List<Vector2>();
-
-            Vector2 lastMove = grid._lastMove;
-            CellType lastMoveCellType = grid._gridCells[(int)lastMove.X, (int)lastMove.Y]._cellType;
-
-            var LongestChainResult = GetLongestChainAtPosition(grid, lastMoveCellType, (int)lastMove.X, (int)lastMove.Y);
-            winningMarkers = LongestChainResult.markerPositions;
-
-            // Check for 4 chained cells at the last move
-            if (LongestChainResult.count >= 4)
+            if (GraphicsEngine._isMouseInside)
             {
-                gameState = GameState.GameOver;
-                winner = lastMoveCellType == CellType.Red ? Winner.Player : Winner.Computer;
+                _indicator.UpdatePosition();
             }
 
-            // If no players have won, check for a draw
-            if (gameState == GameState.Playing && CheckForDraw(grid))
-            {
-                gameState = GameState.GameOver;
-                winner = Winner.Draw;
-            }
-
-            GameCheckResult gameCheckResult = new GameCheckResult(gameState, winner, winningMarkers);
-
-            return gameCheckResult;
+            _grid.HighlightSelectedCell(_playerTurn ? Color.Firebrick : Color.Gold);
+            _indicator.SetFillColor(_playerTurn ? Color.Firebrick : Color.Gold);
         }
 
         // Checks a grid for a draw
-        private static bool CheckForDraw(Grid grid)
+        private bool CheckForDraw(Grid grid)
         {
             bool draw = true;
 
@@ -152,7 +176,7 @@ namespace Connect4.src.Game
         }
 
         // Returns the longest chain of cells of a given type at a position in the grid aswell as the positions of those cells
-        private static (int count, List<Vector2> markerPositions) GetLongestChainAtPosition(Grid grid, CellType cellType, int col, int row)
+        private (int count, List<Vector2> markerPositions) GetLongestChainAtPosition(Grid grid, CellType cellType, int col, int row)
         {
             (int dx, int dy)[] directions = new (int dx, int dy)[]
             {
@@ -166,12 +190,12 @@ namespace Connect4.src.Game
 
             List<Vector2> longestMarkerPositions = new List<Vector2>();
 
-            foreach ((int dx, int dy) direction in directions)
+            foreach (var (dx, dy) in directions)
             {
                 int currentCount = 1;
 
-                var countMarkersPositiveResult = CountMarkers(grid, cellType, direction.dx, direction.dy, col, row);
-                var countMarkersNegativeResult = CountMarkers(grid, cellType, -direction.dx, -direction.dy, col, row);
+                var countMarkersPositiveResult = CountMarkers(grid, cellType, dx, dy, col, row);
+                var countMarkersNegativeResult = CountMarkers(grid, cellType, -dx, -dy, col, row);
 
                 // Check both sides of a direction
                 currentCount += countMarkersPositiveResult.count;
@@ -196,7 +220,7 @@ namespace Connect4.src.Game
         }
 
         // Counts the markers on a grid in a given direction
-        private static (int count, List<Vector2> markerPositions) CountMarkers(Grid grid, CellType cellType, int dx, int dy, int col, int row)
+        private (int count, List<Vector2> markerPositions) CountMarkers(Grid grid, CellType cellType, int dx, int dy, int col, int row)
         {
             int x = col;
             int y = row;

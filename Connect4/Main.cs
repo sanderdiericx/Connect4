@@ -1,8 +1,8 @@
 ﻿using Connect4.src.Graphics;
 using System;
 using System.Diagnostics;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace Connect4
 {
@@ -31,7 +31,7 @@ namespace Connect4
             _btnNewGame = btnNewGame;
             _lblWinner = lblWinner;
 
-            _btnNewGame.Location = new Point(Width - _btnNewGame.Width - 130,_btnNewGame.Location.Y);
+            _btnNewGame.Location = new Point(Width - _btnNewGame.Width - 130, _btnNewGame.Location.Y);
             _lblWinner.Location = new Point(130, _lblWinner.Location.Y);
 
             _btnNewGame.Visible = false;
@@ -64,8 +64,10 @@ namespace Connect4
             e.Graphics.DrawImage(GraphicsEngine._frame, 0, 0);
         }
 
+        /*
+         * Mouse Events
+         */
 
-        // Mouse events
         private void Main_MouseEnter(object sender, EventArgs e)
         {
             GraphicsEngine._isMouseInside = true;
@@ -84,6 +86,16 @@ namespace Connect4
         private void Main_MouseUp(object sender, MouseEventArgs e)
         {
             GraphicsEngine._isMouseDown = false;
+        }
+
+        private void btnNewGame_MouseDown(object sender, MouseEventArgs e)
+        {
+            GraphicsEngine._btnNewGameClicked = true;
+        }
+
+        private void btnNewGame_MouseUp(object sender, MouseEventArgs e)
+        {
+            GraphicsEngine._btnNewGameClicked = false;
         }
     }
 }

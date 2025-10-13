@@ -50,6 +50,8 @@
             this.btnNewGame.TabIndex = 1;
             this.btnNewGame.Text = "New Game";
             this.btnNewGame.UseVisualStyleBackColor = true;
+            this.btnNewGame.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnNewGame_MouseDown);
+            this.btnNewGame.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnNewGame_MouseUp);
             // 
             // Main
             // 
