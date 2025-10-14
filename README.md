@@ -3,6 +3,7 @@
 A complete Connect 4 game built in **C#**, using **WinForms** for window management and input handling.  
 All rendering is done **pixel by pixel**, with no external graphics libraries used.
 
+<img width="1380" height="957" alt="Connect 4 14_10_2025 22_58_05" src="https://github.com/user-attachments/assets/4aa30805-da8c-4328-9fb1-27a254c80b78" />
 ![Demo](https://github.com/user-attachments/assets/6c9c54b2-9c5a-4e66-84c4-83e786b5a69d)
 
 ---
