@@ -76,6 +76,25 @@ namespace Connect4.src.Game
 
                     GraphicsEngine.StartAnimationChain(animations, true);
                 }
+
+                // Create and start an animation for all markers not part of the winning markers
+                for (int i = 0; i < _grid._gridLayout._columns; i++)
+                {
+                    for (int j = 0; j < _grid._gridLayout._rows; j++)
+                    {
+                        Circle currentCellMarker = _grid._gridCells[i, j]._cellMarker;
+
+                        // Make sure we dont apply this on the winning markers, and that the marker has already been placed
+                        if (!gameCheckResult._winningMarkers.Contains(new Vector2(i, j)) && currentCellMarker != null)
+                        {
+                            Color newColor = Color.FromArgb(100, currentCellMarker._fillColor); // Set slightly transparent
+                            AnimationTarget animationTarget = new AnimationTarget(currentCellMarker, 0.5f, x => x * x); // Exponential change
+                            ColorAnimation colorAnimation = new ColorAnimation(animationTarget, newColor);
+
+                            GraphicsEngine.StartAnimation(colorAnimation);
+                        }
+                    }
+                }
             }
         }
 
@@ -96,7 +115,7 @@ namespace Connect4.src.Game
             if (LongestChainResult.count >= 4)
             {
                 gameState = GameState.GameOver;
-                winner = lastMoveCellType == CellType.Red ? Winner.Player : Winner.Computer;
+                winner = lastMoveCellType == CellType.Red ? Winner.Player1 : Winner.Player2;
             }
 
             // If no players have won, check for a draw
@@ -112,24 +131,26 @@ namespace Connect4.src.Game
         }
 
         // Show win label and reset button
-        internal void ShowWinUI(GameCheckResult gameCheckResult)
+        internal void ShowWinUI(GameCheckResult gameCheckResult, int playerOneWins, int playerTwoWins)
         {
             string winnerText = "";
             Winner winner = gameCheckResult._winner;
 
-            if (winner == Winner.Player)
+            if (winner == Winner.Player1)
             {
-                winnerText = "Player has won!";
+                winnerText = "Player 1 has won!";
             }
-            else if (winner == Winner.Computer)
+            else if (winner == Winner.Player2)
             {
-                winnerText = "Computer has won!";
+                winnerText = "Player 2 has won!";
             }
             else
             {
                 winnerText = "Draw!";
             }
 
+            winnerText += $"\nPlayer 1 has won: {playerOneWins} times.\nPlayer 2 has won: {playerTwoWins} times.";
+    
             Main._lblWinner.Text = winnerText;
 
             Main._lblWinner.Visible = true;

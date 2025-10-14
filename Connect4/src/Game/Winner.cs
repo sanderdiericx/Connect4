@@ -2,8 +2,8 @@
 {
     internal enum Winner
     {
-        Player,
-        Computer,
+        Player1,
+        Player2,
         Draw,
         None
     }

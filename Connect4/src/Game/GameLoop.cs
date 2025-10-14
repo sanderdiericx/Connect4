@@ -1,5 +1,6 @@
 ﻿using Connect4.src.Graphics;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Numerics;
 
@@ -19,6 +20,9 @@ namespace Connect4.src.Game
         private static GameCheckResult _gameCheckResult;
         private static bool _gameOverHappened;
 
+        private static int _player1Wins;
+        private static int _player2Wins;
+
         internal static void LoadGame()
         {
             // Setup first game
@@ -27,6 +31,9 @@ namespace Connect4.src.Game
 
             _gameCheckResult = new GameCheckResult(GameState.Playing, Winner.None, new List<Vector2>());
             _gameOverHappened = false;
+
+            _player1Wins = 0;
+            _player2Wins = 0;
         }
 
         internal static void UpdateGame()
@@ -37,9 +44,18 @@ namespace Connect4.src.Game
             {
                 if (!_gameOverHappened) // Run first time game over code
                 {
+                    if (_gameCheckResult._winner == Winner.Player1)
+                    {
+                        _player1Wins++;
+                    }
+                    else if (_gameCheckResult._winner == Winner.Player2)
+                    {
+                        _player2Wins++;
+                    }
+
                     _game.GameOver(_gameCheckResult);
 
-                    _game.ShowWinUI(_gameCheckResult);
+                    _game.ShowWinUI(_gameCheckResult, _player1Wins, _player2Wins);
 
                     _gameOverHappened = true;
                 }
@@ -60,7 +76,7 @@ namespace Connect4.src.Game
 
             if (gameState == GameState.Playing)
             {
-                // Try drop a player marker
+                // Try drop a player 1 marker
                 if (_game._playerTurn == true)
                 {
                     if (_game.TryDropMarker(CellType.Red))
@@ -70,7 +86,7 @@ namespace Connect4.src.Game
                         _game.NextTurn();
                     }
                 }
-                else // Computer turn
+                else // Player 2 turn
                 {
                     if (_game.TryDropMarker(CellType.Yellow))
                     {
