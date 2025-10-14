@@ -149,7 +149,7 @@ namespace Connect4.src.Game
                 winnerText = "Draw!";
             }
 
-            winnerText += $"\nPlayer 1 has won: {playerOneWins} times.\nPlayer 2 has won: {playerTwoWins} times.";
+            winnerText += $"\nPlayer 1 has won: {playerOneWins} {(playerOneWins == 1 ? "time" : "times")}.\nPlayer 2 has won: {playerTwoWins} {(playerTwoWins == 1 ? "time" : "times")}.";
     
             Main._lblWinner.Text = winnerText;
 
