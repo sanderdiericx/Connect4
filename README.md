@@ -28,12 +28,13 @@ All rendering is done **pixel by pixel**, with no external graphics libraries us
 ## **Architecture**
 
 ### **Rendering System**
-- A **RenderBatch** object holds all sprites to be rendered each frame the engine automatically draws all sprites within this batch  
+- A **RenderBatch** object holds all sprites to be rendered each frame, the engine automatically draws all sprites within this batch  
 - Each sprite type is rasterized directly into a bitmap buffer  
 - The final bitmap is drawn to the WinForms window every frame  
 - Rendering is entirely software based, with no reliance on GPU acceleration  
 
 ### **Animation System**
+- A **AnimationBatch** object holds all animations to be updated each frame, the engine automatically updates these animations and determines whether they are finished or not
 - Each animation defines its **target sprite**, **speed**, and an **easing function** that controls how the animation behaves  
 - Two animation types are currently supported: **Transform Animations** and **Color Animations**, each with their own parameters  
 - Animations are updated using **linear interpolation (lerp)**  
